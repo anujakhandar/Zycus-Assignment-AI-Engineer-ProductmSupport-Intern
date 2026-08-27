@@ -181,6 +181,20 @@ class KnowledgeBaseIndex:
         # Sort by score, then chunk_id, so ties resolve identically every run -
         # the eval harness depends on this being stable.
         hits.sort(key=lambda hit: (-hit.score, hit.chunk.chunk_id))
+
+        # If the ticket quotes an error code, the section documenting that code
+        # must appear, whatever it scored. Codes in this corpus are scattered
+        # across products: a CloudSync ticket can quote SCHEMA_MISMATCH, which is
+        # documented under DataBridge Pro. Product and area boosts then push the
+        # CloudSync sections above the one section that actually explains the
+        # error, and the model is left with nothing to cite. Raising the code
+        # bonus would only move the arbitrary number around, so instead the
+        # code-matching sections are promoted ahead of everything else.
+        if query_codes:
+            documented = [hit for hit in hits if hit.matched_codes]
+            rest = [hit for hit in hits if not hit.matched_codes]
+            hits = documented + rest
+
         return hits[:top_k]
 
     def retrieve_for_ticket(

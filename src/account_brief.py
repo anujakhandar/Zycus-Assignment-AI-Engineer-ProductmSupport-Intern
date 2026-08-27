@@ -15,10 +15,12 @@ Two-step chain for one account:
 Splitting extraction from synthesis means a wording change in the summary prompt
 cannot alter which tickets were flagged.
 
-**Determinism.** ``temperature=0``, a content-addressed response cache, ticket
-history sorted by ``ticket_id``, statistics counted in a fixed key order, and
-signals ordered by ``(ticket_id, quote)``. The same account id produces a
-byte-identical brief.
+**Determinism.** A content-addressed response cache, ticket history sorted by
+``ticket_id``, statistics counted in a fixed key order, and signals ordered by
+``(ticket_id, quote)``. The same account id produces a byte-identical brief.
+Note that sampling controls are not available to help here: the Messages API
+removed ``temperature``, so every guarantee comes from the cache and from
+stable input ordering.
 
 **Two dataset facts this has to handle.** ``account_id`` on tickets does not
 resolve to accounts (484 distinct ids across 500 tickets, 4 matches), so the
@@ -96,7 +98,26 @@ def account_tickets(
     """
     gaps: list[str] = []
 
-    by_id = [t for t in dataset.tickets if t.account_id == account.account_id]
+    # An account_id match is only trusted when the company also agrees.
+    #
+    # This is not defensive coding, it is a measured property of the dataset:
+    # all four tickets in the file whose account_id resolves to a real account
+    # were written by a *different* company. Trusting the id alone puts one
+    # customer's words into another customer's brief, which is a confidentiality
+    # failure rather than a data quality quibble.
+    id_matches = [t for t in dataset.tickets if t.account_id == account.account_id]
+    by_id = [t for t in id_matches if not account.company or t.company == account.company]
+
+    conflicts = [t for t in id_matches if t not in by_id]
+    if conflicts:
+        others = sorted({t.company for t in conflicts if t.company})
+        gaps.append(
+            f"Rejected {len(conflicts)} ticket(s) carrying account_id {account.account_id} "
+            f"but written by {', '.join(others)}. The account_id field on tickets does not "
+            f"reliably reference accounts.json, so id matches are only accepted when the "
+            f"company agrees."
+        )
+
     matched = by_id
     if not by_id and account.company:
         matched = [t for t in dataset.tickets if t.company == account.company]

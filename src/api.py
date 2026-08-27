@@ -52,7 +52,7 @@ app = FastAPI(
 
 
 class BriefRequest(BaseModel):
-    account_id: str = Field(description="Account id or company name, e.g. ACC-3847")
+    account_id: str = Field(description="Account id or company name, e.g. ACC-1785")
     days: Optional[int] = Field(default=90, description="Ticket window in days. Null means all history.")
 
 

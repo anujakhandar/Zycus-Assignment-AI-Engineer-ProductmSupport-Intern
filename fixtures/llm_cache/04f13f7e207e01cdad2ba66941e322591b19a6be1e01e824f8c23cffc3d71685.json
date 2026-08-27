@@ -1,0 +1,19 @@
+{
+  "input_tokens": 2177,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 381,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4360,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4747,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.4.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\":      {\"value\": \"AnalyticsHub\", \"reasoning\": \"The customer explicitly names AnalyticsHub as the product they are provisioning users and setting up permissions for.\", \"confidence\": 1.0},\n  \"product_area\": {\"value\": \"Data Sources\", \"reasoning\": \"The customer is asking about Data Sources permissions setup.\", \"confidence\": 0.9},\n  \"category\":     {\"value\": \"Onboarding\", \"reasoning\": \"The ticket is a request for onboarding assistance, bulk user provisioning, and training materials.\", \"confidence\": 1.0},\n  \"urgency\":      {\"value\": \"P4\", \"reasoning\": \"This is a request for onboarding and setup assistance with no time pressure or business stoppage.\", \"confidence\": 1.0},\n  \"known_issue\": null,\n  \"cited_chunk_ids\": [\"onboarding/onboarding-guide.md#00\", \"onboarding/onboarding-guide.md#02\", \"onboarding/onboarding-guide.md#03\"],\n  \"responder_team\": \"Onboarding & Enablement\",\n  \"routing_reasoning\": \"New-organisation and new-user setup inquiries go to the Onboarding & Enablement team.\",\n  \"draft_response\": \"Hello! Thank you for reaching out to help get your 402 new team members set up on AnalyticsHub. For bulk user provisioning, you can use the CSV import feature under Settings > Users > Import > Download Template, which supports up to 500 users per file. Regarding your request for training materials and onboarding call availability, our team will review your Professional plan details and follow up with the next steps shortly. Please let us know if you have any questions in the meantime.\"\n}"
+}
