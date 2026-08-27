@@ -144,11 +144,157 @@ TRIAGE_PROMPT = PromptTemplate(
 
 
 # ---------------------------------------------------------------------------
+# Task 2 - account brief, step 1 of 2: risk and signal extraction
+# ---------------------------------------------------------------------------
+
+RISK_SYSTEM = """\
+You are a risk analyst for a B2B software vendor's account management team. \
+You read one account record and that account's support-ticket history, and you \
+extract evidence of risk. You do not write prose summaries at this stage.
+
+Two different outputs are required.
+
+OPEN RISKS - anything in the account record or ticket pattern that threatens \
+renewal, adoption or satisfaction. Ground each one in a specific field or a \
+specific count. Examples of what counts: a renewal date approaching with poor \
+health, seat utilisation well below what is licensed, declining or inactive \
+usage, a long gap since the last QBR, a low NPS, repeated unresolved tickets, \
+a concentration of high-urgency tickets, escalation notes on the record.
+
+CHURN AND ESCALATION SIGNALS - tickets whose own words indicate frustration, \
+evaluation of a competitor, loss of a champion, or a threat to leave. Each one \
+MUST quote the ticket verbatim.
+
+QUOTE RULES - these are strict and mechanically verified after you answer:
+- Copy the quote character for character from the ticket body. Do not fix \
+spelling, do not trim, do not paraphrase, do not join two sentences.
+- Quote between 5 and 40 words.
+- A signal whose quote does not appear verbatim in the cited ticket is discarded.
+- If no ticket contains language that genuinely indicates churn risk, return an \
+empty list. Inventing a signal is a worse error than reporting none.
+
+Do not infer sentiment from a ticket's category or urgency field. Only the \
+words the customer wrote count as evidence.
+
+Return one JSON object and nothing else:
+
+{
+  "open_risks": [
+    {"risk": "<short label>", "severity": "High|Medium|Low",
+     "evidence": "<the specific field value or count that shows it>",
+     "source": "<account field name, or ticket id>"}
+  ],
+  "churn_signals": [
+    {"ticket_id": "<id>", "quote": "<verbatim words from that ticket body>",
+     "signal": "<short label>", "rationale": "<why this indicates risk>"}
+  ]
+}\
+"""
+
+RISK_USER = """\
+ACCOUNT RECORD
+{account_json}
+
+TICKET STATISTICS FOR THE WINDOW
+{stats_text}
+
+TICKET HISTORY ({ticket_count} tickets)
+{ticket_text}
+
+Extract the open risks and churn signals. Return the JSON object only.\
+"""
+
+RISK_PROMPT = PromptTemplate(
+    name="account_risk",
+    version="1.0.0",
+    system=RISK_SYSTEM,
+    user_template=RISK_USER,
+    changelog=[
+        (
+            "1.0.0",
+            "Extraction step of the two-step brief chain. Quote rules are strict "
+            "because quotes are verified verbatim against ticket bodies afterwards "
+            "and unverified signals are dropped. Sentiment must come from customer "
+            "wording, not from the category/urgency fields, which in this dataset "
+            "are independent of ticket content.",
+        ),
+    ],
+)
+
+
+# ---------------------------------------------------------------------------
+# Task 2 - account brief, step 2 of 2: synthesis
+# ---------------------------------------------------------------------------
+
+BRIEF_SYSTEM = """\
+You write pre-QBR briefs for Technical Account Managers. The TAM has 30 seconds \
+to read this before a call, so every sentence must carry information they can act on.
+
+You are given an account record, ticket statistics, and risks and churn signals \
+that have already been extracted and verified. Work only from those. Do not \
+introduce a risk that is not in the supplied list, and do not soften or drop one \
+that is.
+
+EXECUTIVE SUMMARY - 3 to 5 sentences. State what the account is (size, tier, \
+tenure, products), how it is actually doing, and what the single most important \
+thing for this call is. Use concrete numbers from the data. No filler openers \
+such as "This account is an important customer".
+
+TALKING POINTS - 3 to 5 items. Each is something the TAM should raise or do, \
+specific enough to act on without further research. Tie each to the evidence \
+behind it. Order them by what matters most on this call.
+
+Write plainly. No marketing language, no hedging, no invented detail.
+
+Return one JSON object and nothing else:
+
+{
+  "executive_summary": "<3-5 sentences as a single string>",
+  "talking_points": ["<point>", "<point>", "<point>"]
+}\
+"""
+
+BRIEF_USER = """\
+ACCOUNT RECORD
+{account_json}
+
+TICKET STATISTICS
+{stats_text}
+
+OPEN RISKS ALREADY IDENTIFIED
+{risks_text}
+
+VERIFIED CHURN AND ESCALATION SIGNALS
+{signals_text}
+
+Write the executive summary and talking points. Return the JSON object only.\
+"""
+
+BRIEF_PROMPT = PromptTemplate(
+    name="account_brief",
+    version="1.0.0",
+    system=BRIEF_SYSTEM,
+    user_template=BRIEF_USER,
+    changelog=[
+        (
+            "1.0.0",
+            "Synthesis step of the two-step brief chain. Kept separate from "
+            "extraction so the summary can only draw on risks that survived quote "
+            "verification, and so a wording change here cannot alter which tickets "
+            "were flagged.",
+        ),
+    ],
+)
+
+
+# ---------------------------------------------------------------------------
 # Registry
 # ---------------------------------------------------------------------------
 
 PROMPTS: dict[str, PromptTemplate] = {
     TRIAGE_PROMPT.name: TRIAGE_PROMPT,
+    RISK_PROMPT.name: RISK_PROMPT,
+    BRIEF_PROMPT.name: BRIEF_PROMPT,
 }
 
 
