@@ -1,6 +1,27 @@
+# Requires Python 3.10 or newer. main.py checks this and exits with a clear
+# message on anything older. 3.10 is the floor set by anthropic, python-dotenv
+# and streamlit alike, not a preference.
+#
+# Every version is bounded on both sides. The lower bound is the first release
+# carrying an API this project uses; the upper bound stops a future major
+# release from silently breaking a clean install months from now.
+#
+# Install with:  pip install -r requirements.txt
+
+# Claude API client. The 1.x line moved to httpx2 and dropped Python 3.9, so the
+# floor is 1.0 rather than a 0.x release.
 anthropic>=1.0,<2.0
+
+# Data validation for every pipeline input and output. v2 only: the code uses
+# model_validate, model_dump and ConfigDict, none of which exist in v1.
 pydantic>=2.7,<3.0
+
+# Reads .env so the API key never has to be exported by hand.
+python-dotenv>=1.0,<2.0
+
+# REST interface, src/api.py, served by `python main.py serve`.
 fastapi>=0.110,<1.0
 uvicorn[standard]>=0.29,<1.0
-python-dotenv>=1.0,<2.0
+
+# Web interface, app.py, served by `streamlit run app.py`.
 streamlit>=1.30,<2.0
