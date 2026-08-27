@@ -100,6 +100,36 @@ def cmd_triage(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_brief(args: argparse.Namespace) -> int:
+    from src.account_brief import build_account_brief
+
+    brief = build_account_brief(args.account, days=None if args.all_history else args.days)
+
+    if args.json:
+        print(json.dumps(brief.model_dump(), indent=2, ensure_ascii=False))
+        return 0
+
+    print(brief.to_markdown())
+    print(f"\nprompt chain {brief.prompt_version}   model {brief.model}   cached {brief.cached}")
+    return 0
+
+
+def cmd_accounts(args: argparse.Namespace) -> int:
+    """List account ids, so `brief` can be run without opening the JSON."""
+    from src.data_loader import load_accounts
+
+    accounts = sorted(load_accounts(), key=lambda a: a.company or a.account_id)
+    print(f"{'account_id':<12} {'company':<28} {'tier':<14} {'health':<10} {'ARR':>10}")
+    print("-" * 78)
+    for account in accounts:
+        print(
+            f"{account.account_id:<12} {(account.company or ''):<28} "
+            f"{(account.plan_tier or ''):<14} {(account.health_status or ''):<10} "
+            f"{account.arr_usd or 0:>10,.0f}"
+        )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="main.py",
@@ -116,6 +146,16 @@ def build_parser() -> argparse.ArgumentParser:
     triage.add_argument("--top-k", type=int, default=4, help="knowledge-base sections to retrieve")
     triage.add_argument("--json", action="store_true", help="emit the raw structured output")
     triage.set_defaults(func=cmd_triage)
+
+    brief = subparsers.add_parser("brief", help="Task 2 - build a TAM account brief")
+    brief.add_argument("--account", required=True, help="account_id or company name, e.g. ACC-3847")
+    brief.add_argument("--days", type=int, default=90, help="ticket window in days (default 90)")
+    brief.add_argument("--all-history", action="store_true", help="ignore the window entirely")
+    brief.add_argument("--json", action="store_true", help="emit the raw structured output")
+    brief.set_defaults(func=cmd_brief)
+
+    accounts = subparsers.add_parser("accounts", help="list the accounts available to brief")
+    accounts.set_defaults(func=cmd_accounts)
 
     return parser
 
