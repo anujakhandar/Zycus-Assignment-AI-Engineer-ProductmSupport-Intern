@@ -77,7 +77,7 @@ class RetrievalHit:
 
     def excerpt(self, limit: int = 400) -> str:
         text = " ".join(self.chunk.text.split())
-        return text if len(text) <= limit else text[: limit - 1].rstrip() + "…"
+        return text if len(text) <= limit else text[: limit - 1].rstrip() + "..."
 
 
 class KnowledgeBaseIndex:
@@ -206,7 +206,7 @@ def format_hits_for_prompt(hits: Sequence[RetrievalHit], *, excerpt_chars: int =
     for position, hit in enumerate(hits, 1):
         text = " ".join(hit.chunk.text.split())
         if len(text) > excerpt_chars:
-            text = text[: excerpt_chars - 1].rstrip() + "…"
+            text = text[: excerpt_chars - 1].rstrip() + "..."
         blocks.append(
             f"[{position}] chunk_id: {hit.chunk.chunk_id}\n"
             f"    document: {hit.chunk.source}\n"
