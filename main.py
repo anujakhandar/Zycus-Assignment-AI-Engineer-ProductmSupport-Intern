@@ -16,7 +16,7 @@ from pathlib import Path
 
 # Checked before anything else so an unsupported interpreter reports itself
 # clearly instead of failing later inside a dependency. 3.10 is the floor set by
-# anthropic, python-dotenv and streamlit alike.
+# google-genai, python-dotenv and streamlit alike.
 MINIMUM_PYTHON = (3, 10)
 if sys.version_info < MINIMUM_PYTHON:
     sys.exit(

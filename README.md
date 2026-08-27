@@ -49,10 +49,11 @@ copy .env.example .env
 
 On macOS or Linux, use `source .venv/bin/activate` and `cp .env.example .env`.
 
-Then open `.env` and add an Anthropic API key.
+Then open `.env` and add a Gemini API key. The free tier needs a Google account
+and no card. Get one at `aistudio.google.com`, under Get API key.
 
 ```
-ANTHROPIC_API_KEY=sk-ant-...
+GEMINI_API_KEY=your-key-here
 ```
 
 Edit `.env`, never `.env.example`. The example file is committed to the repository and
@@ -120,7 +121,7 @@ rules and firewall allowlist for that connector...
 
 Overall confidence 0.90   Human review: no
 
-prompt triage@1.1.0   model claude-sonnet-4-6   cached True
+prompt triage@1.1.0   model gemini-2.0-flash   cached True
 ```
 
 ### How it works
@@ -185,8 +186,9 @@ Competitive evaluation  (TKT-10231)
 ### Determinism
 
 The brief is deterministic for a given account id, as the task requires. Four
-mechanisms combine: temperature is fixed at zero, every request is keyed into a content
-addressed cache and replayed rather than resampled, ticket history is sorted by id
+mechanisms combine: temperature is fixed at zero and the seed is pinned, every request
+is keyed into a content addressed cache and replayed rather than resampled, ticket
+history is sorted by id
 before it enters the prompt, and statistics and signals are serialised in a fixed key
 order. Evaluation case B4 asserts this by building the same brief twice and comparing
 the rendered output.
@@ -343,8 +345,14 @@ record reach the API. The full ticket file never leaves the machine. The cache s
 request shape only, meaning model, temperature and character counts, never prompt
 bodies, and debug logs carry token counts and stop reasons rather than content.
 
-Stating the exposure honestly: ticket bodies and account records do reach the API, and
-cached responses sit unencrypted on disk. In production I would add a redaction pass
+One point specific to this provider. The Gemini free tier may use submitted data to
+improve the product. That is acceptable here only because every record in this project
+is synthetic and the brief forbids introducing real data. A production deployment
+handling genuine tickets could not run on it, and would need a paid tier carrying a no
+training guarantee.
+
+Stating the rest of the exposure honestly: ticket bodies and account records do reach
+the API, and cached responses sit unencrypted on disk. In production I would add a redaction pass
 before egress, mapping names, email addresses and identifiers to placeholders with a
 regex and NER pass and rehydrating locally after the response returns; move the cache to
 encrypted storage with a retention limit; and run under a zero retention agreement. That
@@ -353,10 +361,14 @@ redaction pass is the highest value addition and is not implemented here.
 ### Scaling to ten times the volume
 
 Five thousand tickets is not a modelling problem, since triage is per ticket and
-embarrassingly parallel. Cost and rate limits break first: five thousand calls at
-roughly two cents each is about ninety dollars a day, and the client is synchronous, so
-throughput is one ticket at a time. The fix is the batch API for anything not user
-facing, at half the cost, plus a bounded concurrency pool for what is.
+embarrassingly parallel. Rate limits break first, and immediately. The free tier is
+measured in requests per minute and per day, and five thousand triages plus their
+evaluation runs would exhaust a day's quota long before lunch. The client is also
+synchronous, so throughput is one ticket at a time regardless. The fix is a paid tier
+with a batch endpoint for anything not user facing, plus a bounded concurrency pool for
+what is. Batch processing is the right shape here anyway, because most triage is not
+latency sensitive: only the ticket an agent is actively waiting on needs an immediate
+answer.
 
 The cache breaks second. It writes one JSON file per call into a flat directory, and
 tens of thousands of entries degrade directory operations. It should become SQLite or
@@ -470,11 +482,19 @@ overrode a high confidence prediction straight into the eval suite for review.
 
 ## Cost control
 
+This project runs entirely inside the Gemini free tier, so it costs nothing to
+reproduce. The constraint is quota rather than money, and the controls treat it the
+same way.
+
 `LLM_MAX_CALLS`, default 60, caps live API calls per process and raises before any
 network call is made. Cache hits are free and are not counted, so rerunning the
-evaluations, the demo or continuous integration costs nothing. Triaging the entire
-ticket file would be roughly 500 calls, and the cap exists so an accidental loop cannot
-drain an account balance.
+evaluations, the demo or continuous integration consumes no quota at all. Triaging the
+entire ticket file would be roughly 500 calls, and the cap exists so an accidental loop
+cannot burn a day's allowance in a few seconds.
+
+`LLM_OFFLINE=1` goes further and refuses to make any live call, failing instead. That is
+what continuous integration runs under, which is why the workflow needs no key and no
+repository secret.
 
 ## Project layout
 
@@ -486,7 +506,7 @@ src/
   triage.py             Task 1 pipeline
   account_brief.py      Task 2 pipeline
   schemas.py            pydantic output contracts
-  llm_client.py         Anthropic wrapper with cache, budget and error handling
+  llm_client.py         Gemini wrapper with cache, budget and error handling
   cache.py              content addressed response cache
 prompts/registry.py     versioned prompts with changelogs
 evals/                  test cases, scoring, runner

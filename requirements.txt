@@ -1,6 +1,5 @@
 # Requires Python 3.10 or newer. main.py checks this and exits with a clear
-# message on anything older. 3.10 is the floor set by anthropic, python-dotenv
-# and streamlit alike, not a preference.
+# message on anything older.
 #
 # Every version is bounded on both sides. The lower bound is the first release
 # carrying an API this project uses; the upper bound stops a future major
@@ -8,9 +7,8 @@
 #
 # Install with:  pip install -r requirements.txt
 
-# Claude API client. The 1.x line moved to httpx2 and dropped Python 3.9, so the
-# floor is 1.0 rather than a 0.x release.
-anthropic>=1.0,<2.0
+# Gemini API client. Free tier, no card required.
+google-genai>=1.0,<3.0
 
 # Data validation for every pipeline input and output. v2 only: the code uses
 # model_validate, model_dump and ConfigDict, none of which exist in v1.

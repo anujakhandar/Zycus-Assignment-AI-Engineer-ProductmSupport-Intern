@@ -26,7 +26,7 @@ jobs:
 
       - name: Check no credentials are committed
         run: |
-          if git grep -nE 'sk-ant-[A-Za-z0-9_-]{10,}' -- . ':!.env.example'; then
+          if git grep -nE '(AIza[A-Za-z0-9_-]{30,}|sk-[A-Za-z0-9_-]{20,})' -- . ':!.env.example'; then
             echo "::error::A live-looking API key is present in the repository."
             exit 1
           fi

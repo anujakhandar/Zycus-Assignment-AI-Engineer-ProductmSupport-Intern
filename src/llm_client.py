@@ -1,22 +1,28 @@
-"""Thin wrapper around the Anthropic Messages API.
+"""Thin wrapper around the Gemini API.
 
 Everything in this project that talks to a model goes through :class:`LLMClient`
-so the model id, sampling settings, caching and error handling live in one
-place.
+so the model id, determinism settings, caching, cost control and error handling
+live in one place. Nothing else in the codebase imports a provider SDK, which is
+what kept swapping providers down to a single file.
 
-Two behaviours are worth calling out because the brief asks for them directly:
+Three behaviours matter, because the brief asks for them directly:
 
-* **Determinism.** ``temperature`` defaults to 0.0 and every request is keyed
-  into :class:`~src.cache.ResponseCache`, so an identical input replays an
-  identical response rather than re-sampling.
+* **Determinism.** ``temperature=0`` and a fixed ``seed`` make generation
+  repeatable at the provider. The response cache then guarantees it regardless,
+  by replaying a stored response for an identical request rather than generating
+  again. The brief allows "control temperature, seed, or post-process to ensure
+  this"; this does all three.
 * **Offline execution.** With a populated cache the pipelines need no network
-  and no API key, which is how CI and the eval harness run.
+  and no API key, which is how CI and the evaluation harness run.
+* **Cost control.** Live calls are capped per process. Cache hits are free and
+  are not counted against the cap.
 
 Configuration comes from ``.env`` (see ``.env.example``):
 
-    ANTHROPIC_API_KEY     required for live calls; not needed on a cache hit
-    ANTHROPIC_MODEL       default: claude-sonnet-4-6
+    GEMINI_API_KEY        required for live calls; not needed on a cache hit
+    GEMINI_MODEL          default: gemini-2.0-flash
     LLM_TEMPERATURE       default: 0.0
+    LLM_SEED              default: 42
     LLM_MAX_TOKENS        default: 4096
     LLM_TIMEOUT_SECONDS   default: 60
     LLM_CACHE             on (default) | off - bypass cache reads
@@ -46,8 +52,9 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6")
+DEFAULT_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
 DEFAULT_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.0"))
+DEFAULT_SEED = int(os.getenv("LLM_SEED", "42"))
 DEFAULT_MAX_TOKENS = int(os.getenv("LLM_MAX_TOKENS", "4096"))
 DEFAULT_TIMEOUT = float(os.getenv("LLM_TIMEOUT_SECONDS", "60"))
 DEFAULT_MAX_RETRIES = 3
@@ -55,7 +62,7 @@ DEFAULT_MAX_RETRIES = 3
 # Cache hits are free and uncounted; this caps only calls that reach the API.
 # Sized for a demo run plus a full eval suite (~44 calls). Triaging the whole
 # ticket file would be ~500 calls, so an accidental loop over the dataset stops
-# here instead of quietly spending the budget.
+# here instead of quietly draining a quota.
 DEFAULT_MAX_CALLS = int(os.getenv("LLM_MAX_CALLS", "60"))
 
 
@@ -64,7 +71,7 @@ class LLMError(RuntimeError):
 
 
 class LLMConfigError(LLMError):
-    """Raised when required configuration (an API key) is missing."""
+    """Raised when required configuration (an API key) is missing or rejected."""
 
 
 class LLMOfflineError(LLMError):
@@ -97,6 +104,7 @@ class LLMClient:
         temperature: Optional[float] = DEFAULT_TEMPERATURE,
         max_tokens: int = DEFAULT_MAX_TOKENS,
         *,
+        seed: Optional[int] = DEFAULT_SEED,
         api_key: Optional[str] = None,
         timeout: float = DEFAULT_TIMEOUT,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -106,6 +114,7 @@ class LLMClient:
     ) -> None:
         self.model = model
         self.temperature = temperature
+        self.seed = seed
         self.max_tokens = max_tokens
         self.timeout = timeout
         self.max_retries = max_retries
@@ -117,31 +126,44 @@ class LLMClient:
         self.max_calls = max_calls
         self.live_calls = 0
 
-        self._api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
+        self._api_key = api_key or os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
         self._client = None  # constructed lazily, so a cache-only run needs no key
         self.last_meta: Optional[CallMeta] = None
 
     # -- lazy client -------------------------------------------------------
 
-    def _anthropic(self):
+    def _gemini(self):
         """Build the SDK client on first live call."""
         if self._client is not None:
             return self._client
 
         if not self._api_key:
             raise LLMConfigError(
-                "ANTHROPIC_API_KEY is not set and this request is not in the cache. "
-                "Copy .env.example to .env and add a key, or run against a populated cache."
+                "GEMINI_API_KEY is not set and this request is not in the cache. "
+                "Copy .env.example to .env and add a key from https://aistudio.google.com, "
+                "or run against a populated cache."
             )
 
-        import anthropic  # imported here so offline runs do not need the package loaded
+        # Imported here so an offline run never loads the SDK at all.
+        from google import genai
+        from google.genai import types
 
-        self._client = anthropic.Anthropic(
+        self._client = genai.Client(
             api_key=self._api_key,
-            timeout=self.timeout,
-            max_retries=self.max_retries,
+            http_options=types.HttpOptions(timeout=int(self.timeout * 1000)),
         )
         return self._client
+
+    def available_models(self) -> list[str]:
+        """Model ids this key can actually call, for diagnosing a bad model id."""
+        client = self._gemini()
+        names = []
+        for model in client.models.list():
+            name = (model.name or "").removeprefix("models/")
+            actions = getattr(model, "supported_actions", None) or []
+            if not actions or "generateContent" in actions:
+                names.append(name)
+        return sorted(names)
 
     # -- requests ----------------------------------------------------------
 
@@ -179,21 +201,22 @@ class LLMClient:
 
         On a cache hit no network call is made and ``meta.cached`` is True.
         """
-        params: dict[str, Any] = {
+        effective_temperature = self.temperature if temperature is None else temperature
+
+        # Everything that can change the response goes into the key, so a
+        # changed prompt, model, seed or temperature produces a fresh call
+        # rather than replaying a stale answer.
+        request = {
             "model": self.model,
-            "max_tokens": max_tokens or self.max_tokens,
             "messages": list(messages),
+            "system": system or "",
+            "temperature": effective_temperature,
+            "seed": self.seed,
+            "max_output_tokens": max_tokens or self.max_tokens,
+            "stop_sequences": list(stop_sequences) if stop_sequences else [],
         }
 
-        effective_temperature = self.temperature if temperature is None else temperature
-        if effective_temperature is not None:
-            params["temperature"] = effective_temperature
-        if system:
-            params["system"] = system
-        if stop_sequences:
-            params["stop_sequences"] = list(stop_sequences)
-
-        key = cache_key({**params, "_tags": tags or {}})
+        key = cache_key({**request, "_tags": tags or {}})
         record = self.cache.get(key)
         if record is not None:
             meta = CallMeta(
@@ -215,7 +238,7 @@ class LLMClient:
                 "Run once with a key to populate fixtures/llm_cache/."
             )
 
-        text, meta = self._live_call(params, key, tags or {})
+        text, meta = self._live_call(request, key, tags or {})
         self.cache.put(
             key,
             {
@@ -224,80 +247,109 @@ class LLMClient:
                 "input_tokens": meta.input_tokens,
                 "output_tokens": meta.output_tokens,
                 "stop_reason": meta.stop_reason,
-                "request": _redact_request(params),
+                "request": _redact_request(request),
                 "tags": tags or {},
             },
         )
         return text, meta
 
-    def _live_call(self, params: dict[str, Any], key: str, tags: dict[str, Any]) -> tuple[str, CallMeta]:
-        import anthropic
+    def _live_call(self, request: dict[str, Any], key: str, tags: dict[str, Any]) -> tuple[str, CallMeta]:
+        from google.genai import errors, types
 
         if self.live_calls >= self.max_calls:
             raise LLMBudgetError(
                 f"Live-call budget exhausted ({self.max_calls} calls). "
                 "Raise LLM_MAX_CALLS deliberately if this run really needs more - "
-                "the cap exists so a loop over the dataset cannot drain an API balance."
+                "the cap exists so a loop over the dataset cannot drain a quota."
             )
 
-        client = self._anthropic()
+        client = self._gemini()
+
+        config = types.GenerateContentConfig(
+            system_instruction=request["system"] or None,
+            temperature=request["temperature"],
+            seed=request["seed"],
+            max_output_tokens=request["max_output_tokens"],
+            stop_sequences=request["stop_sequences"] or None,
+        )
+        contents = [
+            types.Content(
+                role="model" if m.get("role") == "assistant" else "user",
+                parts=[types.Part(text=str(m.get("content", "")))],
+            )
+            for m in request["messages"]
+        ]
+
         self.live_calls += 1
         try:
-            message = client.messages.create(**params)
-        except anthropic.AuthenticationError as exc:
-            raise LLMConfigError("Anthropic rejected the API key.") from exc
-        except anthropic.NotFoundError as exc:
-            raise LLMError(f"Unknown model or endpoint: {self.model}") from exc
-        except anthropic.RateLimitError as exc:
-            retry_after = exc.response.headers.get("retry-after", "unknown")
-            raise LLMError(f"Rate limited by the API (retry-after: {retry_after}s).") from exc
-        except anthropic.BadRequestError as exc:
-            raise LLMError(f"Request rejected: {exc.message}") from exc
-        except anthropic.APIStatusError as exc:
-            raise LLMError(f"API error {exc.status_code}: {exc.message}") from exc
-        except anthropic.APIConnectionError as exc:
-            raise LLMError("Could not reach the API - check the network connection.") from exc
+            response = client.models.generate_content(
+                model=request["model"], contents=contents, config=config
+            )
+        except errors.ClientError as exc:
+            message = str(exc)
+            lowered = message.lower()
+            if "api key" in lowered or "unauthenticated" in lowered or "permission" in lowered:
+                raise LLMConfigError(f"The API rejected this key: {message}") from exc
+            if "not found" in lowered or "404" in lowered:
+                raise LLMError(
+                    f"Model {request['model']!r} is not available to this key. "
+                    "Set GEMINI_MODEL in .env to one the key can call."
+                ) from exc
+            if "resource_exhausted" in lowered or "429" in lowered or "quota" in lowered:
+                raise LLMError(f"Rate limit or quota exceeded: {message}") from exc
+            raise LLMError(f"Request rejected: {message}") from exc
+        except errors.ServerError as exc:
+            raise LLMError(f"Provider error, safe to retry: {exc}") from exc
+        except (LLMError, KeyboardInterrupt):
+            raise
+        except Exception as exc:  # network failures surface as plain exceptions
+            raise LLMError(f"Could not reach the API: {type(exc).__name__}: {exc}") from exc
+
+        usage = getattr(response, "usage_metadata", None)
+        finish = None
+        if getattr(response, "candidates", None):
+            finish = getattr(response.candidates[0], "finish_reason", None)
+            finish = getattr(finish, "name", None) or (str(finish) if finish else None)
 
         meta = CallMeta(
-            model=message.model,
+            model=request["model"],
             cached=False,
-            input_tokens=message.usage.input_tokens,
-            output_tokens=message.usage.output_tokens,
-            stop_reason=message.stop_reason,
+            input_tokens=getattr(usage, "prompt_token_count", 0) or 0,
+            output_tokens=getattr(usage, "candidates_token_count", 0) or 0,
+            stop_reason=finish,
             cache_key=key,
             tags=tags,
         )
         self.last_meta = meta
 
-        if message.stop_reason == "max_tokens":
-            logger.warning(
-                "Response hit the max_tokens limit (%s) and may be truncated.",
-                params["max_tokens"],
-            )
-        return extract_text(message), meta
+        if finish and finish.upper() not in ("STOP", "FINISH_REASON_STOP"):
+            logger.warning("Response stopped for reason %s and may be incomplete.", finish)
 
-    def count_tokens(self, prompt: str, *, system: Optional[str] = None) -> int:
-        """Input token count for a prompt, for budgeting retrieved KB context."""
-        params: dict[str, Any] = {
-            "model": self.model,
-            "messages": [{"role": "user", "content": prompt}],
-        }
-        if system:
-            params["system"] = system
-        return self._anthropic().messages.count_tokens(**params).input_tokens
+        return extract_text(response), meta
 
 
-def extract_text(message) -> str:
-    """Concatenate the text blocks of a response, ignoring any other block type."""
-    return "\n".join(block.text for block in message.content if block.type == "text").strip()
+def extract_text(response) -> str:
+    """Pull the text out of a response, tolerating a multi-part candidate."""
+    text = getattr(response, "text", None)
+    if text:
+        return text.strip()
+
+    parts: list[str] = []
+    for candidate in getattr(response, "candidates", None) or []:
+        content = getattr(candidate, "content", None)
+        for part in getattr(content, "parts", None) or []:
+            if getattr(part, "text", None):
+                parts.append(part.text)
+    return "\n".join(parts).strip()
 
 
-def _redact_request(params: dict[str, Any]) -> dict[str, Any]:
+def _redact_request(request: dict[str, Any]) -> dict[str, Any]:
     """Store request shape in the cache without duplicating full prompt bodies."""
     return {
-        "model": params.get("model"),
-        "temperature": params.get("temperature"),
-        "max_tokens": params.get("max_tokens"),
-        "system_chars": len(params.get("system") or ""),
-        "message_chars": sum(len(str(m.get("content", ""))) for m in params.get("messages", [])),
+        "model": request.get("model"),
+        "temperature": request.get("temperature"),
+        "seed": request.get("seed"),
+        "max_output_tokens": request.get("max_output_tokens"),
+        "system_chars": len(request.get("system") or ""),
+        "message_chars": sum(len(str(m.get("content", ""))) for m in request.get("messages", [])),
     }
