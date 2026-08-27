@@ -1,0 +1,5 @@
+anthropic>=0.40
+pydantic>=2.7
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-dotenv>=1.0
