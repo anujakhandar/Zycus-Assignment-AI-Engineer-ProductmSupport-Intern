@@ -60,6 +60,8 @@ PRODUCTS and their areas:
 - SecureVault: Authentication, Encryption, Audit Logs, Key Management, SSO
 - WorkflowEngine: Triggers, Actions, Scheduling, Error Handling, Templates
 
+NAMING THE PRODUCT. If the ticket names a product, that is the product. Never infer it from the topic. A ticket about SSO in WorkflowEngine is WorkflowEngine, not SecureVault, even though SecureVault is where SSO is documented. Only when no product is named may you infer one, and then say so in the reasoning and lower the confidence. The product area must be one of that product's own areas.
+
 CATEGORIES: Bug, Feature Request, How-To, Performance, Billing, Integration, Onboarding, Data Loss
 
 URGENCY:
@@ -87,11 +89,20 @@ platform-wide degradation to Platform Engineering.
 
 GROUNDING RULES
 - The knowledge-base sections given to you are the only reference material you have.
-- Cite a section only if it genuinely addresses the ticket. Citing nothing is \
-correct when nothing matches.
+- Cite, by chunk_id, every supplied section you actually used. If a section \
+addresses the ticket, cite it. An empty cited_chunk_ids list is a positive claim \
+that none of the supplied sections were relevant, so use it only when that is true.
+- Copy chunk_id values exactly as supplied. An id that was not supplied is discarded.
+- Error codes are documented once, on whichever product page happens to describe \
+them, and the same code appears in tickets across every product. A section that \
+documents the error code the customer quoted is relevant to this ticket even when \
+that section sits under a different product. Cite it, and use what it says. Do not \
+dismiss it because the product name differs.
 - Never state a version number, error-code meaning, threshold, limit or config \
 value that is not present in the supplied sections.
 - The draft response must not promise a fix, a root cause, a timeline, or a refund.
+
+BEFORE YOU ANSWER, check cited_chunk_ids one more time. If any supplied section mentions the ticket's product, its module or area, the error code quoted, or the symptom described, that section must appear in cited_chunk_ids. Returning an empty list while such a section was supplied is an error, not caution.
 
 OUTPUT
 Return one JSON object and nothing else. No markdown fence, no commentary.
@@ -127,7 +138,7 @@ Classify this ticket and draft the first response. Return the JSON object only.\
 
 TRIAGE_PROMPT = PromptTemplate(
     name="triage",
-    version="1.1.0",
+    version="1.4.0",
     system=TRIAGE_SYSTEM,
     user_template=TRIAGE_USER,
     changelog=[
@@ -138,6 +149,35 @@ TRIAGE_PROMPT = PromptTemplate(
             "'URGENT' while describing cosmetic issues; added explicit grounding rules "
             "banning unsupported version numbers and thresholds; required per-field "
             "confidence so ambiguous tickets can be routed to human review.",
+        ),
+        (
+            "1.2.0",
+            "First live run exposed two failures. The model answered SecureVault for a "
+            "ticket whose subject and body both name WorkflowEngine, because SSO is "
+            "documented under SecureVault - it inferred the product from the topic. "
+            "Added an explicit rule that a named product wins over an inferred one. "
+            "It also returned an empty cited_chunk_ids while retrieval had supplied the "
+            "section titled 'New Users Cannot Authenticate via SSO', so the citation "
+            "instruction now states that an empty list is a positive claim that nothing "
+            "was relevant, rather than a default.",
+        ),
+        (
+            "1.3.0",
+            "Retrieval was fixed to guarantee that the section documenting a quoted "
+            "error code always reaches the model, but the model still cited nothing "
+            "for a CloudSync ticket quoting SCHEMA_MISMATCH, because that code is "
+            "documented on the DataBridge Pro page and it judged a different "
+            "product's page irrelevant. That reasoning is sound but wrong for this "
+            "corpus, where codes are documented once and recur across every product, "
+            "so the grounding rules now say so explicitly.",
+        ),
+        (
+            "1.4.0",
+            "Across several runs the recurring failure was not retrieval but reticence: "
+            "given clearly relevant sections the model still returned an empty "
+            "cited_chunk_ids, reading 'cite what you used' as permission to use "
+            "nothing. Added an explicit final check stating that an empty list while a "
+            "matching section was supplied is an error rather than caution.",
         ),
     ],
 )
