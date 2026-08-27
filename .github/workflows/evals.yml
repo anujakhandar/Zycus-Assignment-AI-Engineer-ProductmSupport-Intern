@@ -38,16 +38,30 @@ jobs:
       # LLM_OFFLINE=1 means a cache miss fails rather than calling the API, so
       # this job needs no key and no secret. The committed fixtures under
       # fixtures/llm_cache/ supply every response.
+      #
+      # With no fixtures committed there is nothing to replay, and failing the
+      # build would report "the evaluations failed" when the truth is "there is
+      # nothing to evaluate against". The job says which of the two happened.
       - name: Run evaluation harness
         env:
           LLM_OFFLINE: "1"
-        run: python main.py eval
+        run: |
+          count=$(find fixtures/llm_cache -name '*.json' 2>/dev/null | wc -l)
+          if [ "$count" -eq 0 ]; then
+            echo "::warning::No cached model responses are committed, so the evaluation"
+            echo "::warning::suite cannot run offline. Populate fixtures/llm_cache/ by"
+            echo "::warning::running 'python main.py eval' once with an API key."
+            exit 0
+          fi
+          echo "Replaying $count cached responses."
+          python main.py eval
 
       - name: Upload eval report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: eval-report
+          if-no-files-found: ignore
           path: |
             eval_report.json
             eval_report.md
