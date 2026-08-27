@@ -89,39 +89,37 @@ python main.py triage --file ticket.json --json
 TRIAGE  TKT-10042
 ========================================================================
 
-Product        DataBridge Pro   (confidence 0.95)
-               The ticket names DataBridge Pro directly.
+Product        WorkflowEngine   (confidence 1.00)
+               The ticket explicitly names WorkflowEngine as the product.
 
-Product area   Connectors       (confidence 0.90)
-               The failing component is the Connectors pipeline.
+Product area   Triggers   (confidence 0.60)
+               Error references an action field mapping which falls under Triggers/Actions.
 
-Category       Bug              (confidence 0.85)
-               A previously working pipeline now errors, so this is a defect.
+Category       Bug   (confidence 0.70)
+               Users are encountering an configuration error when attempting authentication.
 
-Urgency        P2               (confidence 0.88)
-               A production pipeline is down for 47 users with no workaround.
+Urgency        P2   (confidence 0.90)
+               492 users are blocked from accessing the platform, representing major impact to the organisation.
 
-Responder      Tier-2 Support
-               Reproducible pipeline failure with a specific error code.
+Responder      Tier-1 Support
+               Authentication and configuration troubleshooting steps fall under Tier-1 Support.
 
-Known issue    Pipeline stopped processing
+Known issue    New Users Cannot Authenticate via SSO
 
-KB sections
-               DataBridge Pro, Core Modules  [ERR_CONNECTION_TIMEOUT]
-                 products/databridge-pro.md  (score 28.46)
-               Troubleshooting: Performance Issues, Error Reference
-                 troubleshooting/performance-and-integrations.md  (score 29.08)
+KB sections    
+               - Troubleshooting: Integration Issues > Common Integration Errors  [INVALID_CONFIGURATION]
+                 troubleshooting/performance-and-integrations.md  (score 43.704)
+               - Troubleshooting: Authentication & SSO > New Users Cannot Authenticate via SSO
+                 troubleshooting/authentication-sso.md  (score 42.307)
 
 Draft first response
 ------------------------------------------------------------------------
-Thanks for flagging this. ERR_CONNECTION_TIMEOUT after 30s points to the
-source being unreachable, so the first thing worth checking is the network
-rules and firewall allowlist for that connector...
+Hello, thank you for reaching out to support regarding the SSO issues for new joiners in WorkflowEngine. We understand that 492 users are currently blocked from accessing the platform. Please check your action field mappings and verify whether the new user's IDP group has been mapped to a product role under Settings → SSO → Group Mapping. Could you please confirm if the user's primary IDP group appears in that list?
 ------------------------------------------------------------------------
 
-Overall confidence 0.90   Human review: no
+Overall confidence 0.80   Human review: no
 
-prompt triage@1.1.0   model gemini-2.0-flash   cached True
+prompt triage@1.4.0   model gemini-3.5-flash-lite   cached True
 ```
 
 ### How it works
@@ -149,7 +147,7 @@ Three things make the output trustworthy rather than merely plausible.
 
 ```
 python main.py accounts
-python main.py brief --account ACC-3847
+python main.py brief --account ACC-1785
 python main.py brief --account "Initech" --json
 ```
 
@@ -159,28 +157,36 @@ run without opening the JSON.
 ### Sample run
 
 ```
-# Account Brief, Initech (ACC-4654)
+# Account Brief - Cyberdyne Systems (ACC-1785)
 
 ## 1. Executive summary
 
-Initech is an Enterprise account on $240,000 ARR with 298 of 350 seats active and a
-customer relationship dating to 2021. Health is At Risk against a declining usage
-trend. Eleven tickets fall in the current window, five of which are still open...
+Cyberdyne Systems is a Technology sector customer on the Starter plan with $12,000 ARR, utilizing SecureVault across 563 active seats since November 2024. The account is classified as At Risk with a mean CSAT of 2.29, 47 days of inactivity, and a procurement request for a pricing review. The single most important focus for this call is addressing the low satisfaction scores, user inactivity, and procurement's pricing concerns ahead of the May 2027 renewal.
 
 ## 2. Open risks & flagged issues
 
-[High] Renewal approaching against declining usage  (source: renewal_date)
-   Evidence: renews 2026-12-31 with usage_trend "Declining"
-
-### Churn / escalation signals
-
-Competitive evaluation  (TKT-10231)
-   Quote: "we are actively evaluating alternative vendors for this capability"
-   Why it matters: explicit competitor evaluation ahead of a renewal
+- **[High] Inactivity / low engagement** _(source: last_login_days_ago)_
+  - Evidence: 47 days
+- **[High] Low customer satisfaction** _(source: mean_satisfaction)_
+  - Evidence: 2.29
+- **[High] Poor health status** _(source: health_status)_
+  - Evidence: At Risk
+- **[Medium] Procurement pricing review requested** _(source: escalation_notes)_
+  - Evidence: Procurement team requested pricing review
 
 ## 3. Recommended talking points
 
-1. ...
+1. Address the procurement team's pricing review request directly, as noted in the escalation notes.
+2. Investigate the 47-day login gap and low engagement with primary contact Morgan Davis to reverse the At Risk health status.
+3. Review recent support history—specifically the 12 total tickets with a 2.29 mean satisfaction score—to address unresolved issues.
+4. Discuss seat utilization (563 active out of 610 licensed seats) to ensure value realization on the SecureVault product.
+
+---
+
+**Data gaps**
+
+- Rejected 1 ticket(s) carrying account_id ACC-1785 but written by Pinnacle Systems. The account_id field on tickets does not reliably reference accounts.json, so id matches are only accepted when the company agrees.
+- No ticket carries account_id ACC-1785; history resolved by company name (Cyberdyne Systems) instead. The account_id field on tickets does not reference accounts.json.
 ```
 
 ### Determinism
