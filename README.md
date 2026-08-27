@@ -238,6 +238,29 @@ failure so continuous integration can gate on it.
 
 Results are committed as `eval_report.md` and `eval_report.json`.
 
+## REST interface
+
+The brief allows triage to be exposed as a callable Python function or as an endpoint.
+Both exist. `triage_ticket` is importable and is what the CLI, the web interface and the
+evaluation harness all call directly. For HTTP callers there is a small FastAPI service.
+
+```
+python main.py serve
+```
+
+Then open `http://127.0.0.1:8000/docs` for the generated documentation.
+
+1. `GET /health` reports what the process has loaded, which is 500 tickets, 50 accounts
+   and 46 knowledge base sections.
+2. `POST /triage` takes a subject and body and returns the full triage result.
+3. `GET /accounts` lists every account with the fields needed to choose one.
+4. `POST /brief` takes an account id and an optional window and returns the brief.
+
+The knowledge base index is built once at startup and shared across requests rather than
+rebuilt per call. Model errors return 503 rather than 500, because a missing key, an
+exhausted call budget or an uncached request in offline mode are all configuration
+problems the caller can act on rather than server faults. An unknown account returns 404.
+
 ## Web interface
 
 Both tools are also available through a Streamlit interface aimed at people who do not
