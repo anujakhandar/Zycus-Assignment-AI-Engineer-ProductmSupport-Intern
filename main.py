@@ -130,6 +130,33 @@ def cmd_accounts(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_eval(args: argparse.Namespace) -> int:
+    from evals.runner import run_all, write_reports
+
+    print(f"Running evaluation harness (judge {'on' if not args.no_judge else 'off'})...")
+    report = run_all(task=args.task, use_judge=not args.no_judge)
+    json_path, md_path = write_reports(report)
+
+    summary = report["summary"]
+    print("\n" + "=" * 72)
+    print(
+        f"{summary['passed']}/{summary['total_cases']} cases passed "
+        f"({summary['pass_rate']:.0%})   mean quality {summary['mean_quality']:.3f}"
+    )
+    print(
+        f"adversarial {summary['adversarial_passed']}/{summary['adversarial_cases']}   "
+        f"live calls {summary['live_api_calls']}   cache hits {summary['cache_hits']}"
+    )
+    print("=" * 72)
+    for result in report["results"]:
+        mark = "PASS" if result["passed"] else "FAIL"
+        print(f"  {mark}  {result['case_id']:<26} {result['quality_score']:.3f}")
+    print(f"\nwrote {json_path.name} and {md_path.name}")
+
+    # Non-zero exit on failure so CI can gate on this.
+    return 0 if summary["failed"] == 0 else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="main.py",
@@ -156,6 +183,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     accounts = subparsers.add_parser("accounts", help="list the accounts available to brief")
     accounts.set_defaults(func=cmd_accounts)
+
+    evaluate = subparsers.add_parser("eval", help="Task 3 - run the evaluation harness")
+    evaluate.add_argument("--task", choices=["triage", "brief"], help="run only one task's cases")
+    evaluate.add_argument("--no-judge", action="store_true", help="rule-based scoring only")
+    evaluate.set_defaults(func=cmd_eval)
 
     return parser
 
