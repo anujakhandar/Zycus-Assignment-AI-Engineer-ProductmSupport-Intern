@@ -1,0 +1,19 @@
+{
+  "input_tokens": 2136,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 334,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4149,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4747,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.4.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\":      {\"value\": \"SecureVault\", \"reasoning\": \"The customer requests SSO / SAML support, which falls under SecureVault.\", \"confidence\": 0.4},\n  \"product_area\": {\"value\": \"Authentication\", \"reasoning\": \"SSO and SAML are part of Authentication in SecureVault.\", \"confidence\": 0.5},\n  \"category\":     {\"value\": \"Billing\", \"reasoning\": \"The ticket is an upgrade request to move from Professional to Enterprise.\", \"confidence\": 0.9},\n  \"urgency\":      {\"value\": \"P4\", \"reasoning\": \"This is a low-impact upgrade request with no time-critical business disruption or active failure described.\", \"confidence\": 0.9},\n  \"known_issue\": null,\n  \"cited_chunk_ids\": [\"1\"],\n  \"responder_team\": \"Billing Operations\",\n  \"routing_reasoning\": \"Plan upgrades and sales inquiries are handled by Billing Operations.\",\n  \"draft_response\": \"Hello! Thank you for reaching out about upgrading your account to the Enterprise plan to accommodate your user seats and requirements for SSO/SAML, a dedicated TAM, and SLA guarantees. To proceed with the Enterprise upgrade, please submit your upgrade interest at Settings → Billing → Contact Sales, or email your current TAM as outlined in our billing guide. Our sales team will get back to you within 1 business day to discuss custom pricing and the next steps. Please let us know if you need any assistance navigating the settings in the meantime!\"\n}"
+}

@@ -1,0 +1,20 @@
+{
+  "input_tokens": 993,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 268,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 1811,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 1142,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "account": "ACC-1664",
+    "prompt": "account_brief@1.0.0",
+    "task": "account_brief"
+  },
+  "text": "{\n  \"executive_summary\": \"Oscorp Solutions is an Enterprise tier financial services customer with $96,000 ARR, 1,115 active seats out of 1,239 licensed seats, and a renewal date of June 24, 2026. Despite an \\\"Increasing\\\" usage trend and Healthy status, the account faces severe delivery risk driven by 5 unresolved tickets out of 8 total in the last 90 days, including 3 high-urgency Data Loss category tickets. The single most important objective for this call is to immediately address the 5 open tickets—specifically the data loss incidents—before the upcoming June renewal.\",\n  \"talking_points\": [\n    \"Address the 3 Data Loss category tickets immediately, as these high-urgency issues represent significant operational risk with 5 total unresolved tickets currently pending.\",\n    \"Review the status of the 5 unresolved tickets out of 8 total before the June 24, 2026 renewal date to clear blockers and secure account health.\",\n    \"Discuss the 124 unutilized licensed seats (1,115 active out of 1,239 licensed) to ensure license optimization and value realization ahead of renewal.\"\n  ]\n}"
+}

@@ -1,0 +1,19 @@
+{
+  "input_tokens": 1981,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 391,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4244,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4066,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.2.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\": {\n    \"value\": \"CloudSync\",\n    \"reasoning\": \"The ticket explicitly names CloudSync in the subject and body.\",\n    \"confidence\": 1.0\n  },\n  \"product_area\": {\n    \"value\": \"Integrations\",\n    \"reasoning\": \"SSO and authentication flows with external IDPs fall under integrations.\",\n    \"confidence\": 0.7\n  },\n  \"category\": {\n    \"value\": \"How-To\",\n    \"reasoning\": \"The issue involves configuring group mapping for new users via SSO rather than a product bug.\",\n    \"confidence\": 0.8\n  },\n  \"urgency\": {\n    \"value\": \"P2\",\n    \"reasoning\": \"A core workflow is blocked for 308 users who cannot authenticate.\",\n    \"confidence\": 0.9\n  },\n  \"known_issue\": \"New Users Cannot Authenticate via SSO\",\n  \"cited_chunk_ids\": [\n    \"troubleshooting/authentication-sso.md#03\"\n  ],\n  \"responder_team\": \"Tier-1 Support\",\n  \"routing_reasoning\": \"Documentation and SSO configuration troubleshooting questions are handled by Tier-1 Support.\",\n  \"draft_response\": \"Hello, thank you for reaching out to CloudSync support. I understand that your new joiners are currently unable to authenticate via SSO. For this issue, please log in as an admin, navigate to Settings > SSO > Group Mapping, and verify that the new users' primary IDP group appears in the list with a valid role assigned. If any groups are missing, please add them with the appropriate role and ask the users to retry. Please let us know if the issue persists after verifying the group mappings.\"\n}"
+}

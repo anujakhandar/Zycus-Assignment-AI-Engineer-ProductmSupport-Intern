@@ -1,0 +1,19 @@
+{
+  "input_tokens": 2210,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 354,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4350,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4747,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.4.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\": {\n    \"value\": \"CloudSync\",\n    \"reasoning\": \"The ticket explicitly names CloudSync as the product.\",\n    \"confidence\": 1.0\n  },\n  \"product_area\": {\n    \"value\": \"Bandwidth Limits\",\n    \"reasoning\": \"The user is trying to access the Bandwidth Limits module.\",\n    \"confidence\": 1.0\n  },\n  \"category\": {\n    \"value\": \"Bug\",\n    \"reasoning\": \"A consistent error code SCHEMA_MISMATCH is occurring when accessing the module.\",\n    \"confidence\": 0.9\n  },\n  \"urgency\": {\n    \"value\": \"P3\",\n    \"reasoning\": \"A core workflow has an issue affecting users in the organisation, but a workaround or alternative may exist, resulting in moderate impact.\",\n    \"confidence\": 0.8\n  },\n  \"known_issue\": null,\n  \"cited_chunk_ids\": [\n    \"products/databridge-pro.md#01\"\n  ],\n  \"responder_team\": \"Tier-2 Support\",\n  \"routing_reasoning\": \"Reproducible defects and errors go to Tier-2 Support.\",\n  \"draft_response\": \"Hello, thank you for reaching out to CloudSync support. We understand you are seeing a SCHEMA_MISMATCH error when attempting to access Bandwidth Limits and export records across your organisation. Our Tier-2 Support team will investigate this behavior further. In the meantime, please provide any additional context or HAR files if available so we can assist you more quickly.\"\n}"
+}

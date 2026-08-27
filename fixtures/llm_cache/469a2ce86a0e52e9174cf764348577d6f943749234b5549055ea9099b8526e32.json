@@ -1,0 +1,19 @@
+{
+  "input_tokens": 2116,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 350,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4073,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4747,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.4.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\": {\n    \"value\": \"AnalyticsHub\",\n    \"reasoning\": \"The customer explicitly names AnalyticsHub Reports in the ticket body.\",\n    \"confidence\": 1.0\n  },\n  \"product_area\": {\n    \"value\": \"Reports\",\n    \"reasoning\": \"The issue involves column headers in the AnalyticsHub Reports export.\",\n    \"confidence\": 1.0\n  },\n  \"category\": {\n    \"value\": \"Feature Request\",\n    \"reasoning\": \"The customer is requesting a change in casing for column headers to match a style guide, acknowledging there is a workaround.\",\n    \"confidence\": 0.9\n  },\n  \"urgency\": {\n    \"value\": \"P4\",\n    \"reasoning\": \"There is no business impact, the data is unaffected, a workaround exists, and only one person noticed.\",\n    \"confidence\": 1.0\n  },\n  \"known_issue\": null,\n  \"cited_chunk_ids\": [],\n  \"responder_team\": \"Product Management\",\n  \"routing_reasoning\": \"Feature requests regarding export formatting are routed to Product Management for consideration.\",\n  \"draft_response\": \"Hello, thank you for reaching out to support. I understand you would like the column headers in AnalyticsHub Reports exports to be displayed in sentence case rather than title case. Since there is currently no impact on the data and a workaround is available, I have logged this as a feature request for our product team to review. Please let us know if you have any other questions or feature suggestions in the meantime.\"\n}"
+}

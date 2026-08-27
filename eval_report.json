@@ -1,0 +1,643 @@
+{
+  "generated_at": "2026-08-27T22:04:13+00:00",
+  "pass_threshold": 0.7,
+  "judge_enabled": true,
+  "model": "gemini-3.5-flash-lite",
+  "summary": {
+    "total_cases": 13,
+    "passed": 12,
+    "failed": 1,
+    "pass_rate": 0.923,
+    "mean_quality": 0.921,
+    "adversarial_cases": 3,
+    "adversarial_passed": 3,
+    "elapsed_seconds": 0.1,
+    "live_api_calls": 0,
+    "cache_hits": 32
+  },
+  "by_task": {
+    "triage": {
+      "total": 7,
+      "passed": 6,
+      "mean_quality": 0.875
+    },
+    "account_brief": {
+      "total": 6,
+      "passed": 6,
+      "mean_quality": 0.975
+    }
+  },
+  "results": [
+    {
+      "case_id": "T1",
+      "task": "triage",
+      "description": "Explicit data-loss report should be high urgency and route to Tier-2",
+      "adversarial": false,
+      "passed": true,
+      "quality_score": 0.85,
+      "rule_score": 1.0,
+      "judge_score": 0.5,
+      "judge_reasoning": "The draft response asks for logs and routes to Tier-2, but it fails to acknowledge the potential data loss with appropriate seriousness and does not explicitly address the risk of data recovery or lack thereof.",
+      "criteria": [
+        {
+          "name": "urgency is P1 or P2",
+          "passed": true,
+          "weight": 2.0,
+          "critical": true,
+          "error": null
+        },
+        {
+          "name": "category is Data Loss",
+          "passed": true,
+          "weight": 2.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "product identified",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "urgency reasoning given",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "draft is 30-160 words",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "draft promises nothing",
+          "passed": true,
+          "weight": 1.5,
+          "critical": false,
+          "error": null
+        }
+      ],
+      "failed_criteria": [],
+      "critical_failures": [],
+      "error": null,
+      "prompt_version": "triage@1.4.0",
+      "model": "gemini-3.5-flash-lite",
+      "cached": true
+    },
+    {
+      "case_id": "T2",
+      "task": "triage",
+      "description": "Ticket quoting SCHEMA_MISMATCH must surface the documenting KB section",
+      "adversarial": false,
+      "passed": true,
+      "quality_score": 0.85,
+      "rule_score": 1.0,
+      "judge_score": 0.5,
+      "judge_reasoning": "The response references the correct error code (SCHEMA_MISMATCH), but it fails to point to a concrete diagnostic step drawn from the cited documentation (it only asks for HAR files and general context).",
+      "criteria": [
+        {
+          "name": "cites a doc covering the error code",
+          "passed": true,
+          "weight": 2.0,
+          "critical": true,
+          "error": null
+        },
+        {
+          "name": "at least one KB reference",
+          "passed": true,
+          "weight": 1.5,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "category is Bug or Integration or Data Loss",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "draft promises nothing",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        }
+      ],
+      "failed_criteria": [],
+      "critical_failures": [],
+      "error": null,
+      "prompt_version": "triage@1.4.0",
+      "model": "gemini-3.5-flash-lite",
+      "cached": true
+    },
+    {
+      "case_id": "T3",
+      "task": "triage",
+      "description": "Plan upgrade request should route to Billing Operations",
+      "adversarial": false,
+      "passed": true,
+      "quality_score": 0.892,
+      "rule_score": 0.846,
+      "judge_score": 1.0,
+      "judge_reasoning": "The draft concretely addresses the upgrade request by specifically mentioning the Enterprise plan, SSO/SAML, dedicated TAM, SLA guarantees, and providing exact steps (Settings → Billing → Contact Sales) rather than just giving a generic response.",
+      "criteria": [
+        {
+          "name": "category is Billing",
+          "passed": true,
+          "weight": 2.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "routed to Billing Operations",
+          "passed": true,
+          "weight": 2.0,
+          "critical": true,
+          "error": null
+        },
+        {
+          "name": "not treated as urgent",
+          "passed": true,
+          "weight": 1.5,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "cites the billing doc",
+          "passed": false,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        }
+      ],
+      "failed_criteria": [
+        "cites the billing doc"
+      ],
+      "critical_failures": [],
+      "error": null,
+      "prompt_version": "triage@1.4.0",
+      "model": "gemini-3.5-flash-lite",
+      "cached": true
+    },
+    {
+      "case_id": "T4",
+      "task": "triage",
+      "description": "Bulk-operation request is a feature ask, not a defect",
+      "adversarial": false,
+      "passed": true,
+      "quality_score": 1.0,
+      "rule_score": 1.0,
+      "judge_score": 1.0,
+      "judge_reasoning": "The draft acknowledges the feature request honestly, notes that the product team tracks such requests for future updates, and does not commit to building the feature or provide a delivery date.",
+      "criteria": [
+        {
+          "name": "category is Feature Request",
+          "passed": true,
+          "weight": 2.0,
+          "critical": true,
+          "error": null
+        },
+        {
+          "name": "routed to Product Management",
+          "passed": true,
+          "weight": 1.5,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "low urgency",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "draft does not promise the feature",
+          "passed": true,
+          "weight": 1.5,
+          "critical": false,
+          "error": null
+        }
+      ],
+      "failed_criteria": [],
+      "critical_failures": [],
+      "error": null,
+      "prompt_version": "triage@1.4.0",
+      "model": "gemini-3.5-flash-lite",
+      "cached": true
+    },
+    {
+      "case_id": "T5",
+      "task": "triage",
+      "description": "SSO access failure for new joiners routes to Security Engineering",
+      "adversarial": false,
+      "passed": false,
+      "quality_score": 0.533,
+      "rule_score": 0.333,
+      "judge_score": 1.0,
+      "judge_reasoning": "The response explicitly identifies group-to-role mapping under 'Settings > SSO > Group Mapping' as the concrete cause, directly matching the rubric requirement.",
+      "criteria": [
+        {
+          "name": "product area is an access area",
+          "passed": false,
+          "weight": 2.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "cites the SSO troubleshooting doc",
+          "passed": false,
+          "weight": 2.0,
+          "critical": true,
+          "error": null
+        },
+        {
+          "name": "routing explained",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "draft is 30-160 words",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        }
+      ],
+      "failed_criteria": [
+        "product area is an access area",
+        "cites the SSO troubleshooting doc"
+      ],
+      "critical_failures": [
+        "cites the SSO troubleshooting doc"
+      ],
+      "error": null,
+      "prompt_version": "triage@1.4.0",
+      "model": "gemini-3.5-flash-lite",
+      "cached": true
+    },
+    {
+      "case_id": "T6-adversarial-tone",
+      "task": "triage",
+      "description": "ADVERSARIAL: urgent-sounding language over a low-impact request. Urgency must follow business impact, not customer tone.",
+      "adversarial": true,
+      "passed": true,
+      "quality_score": 1.0,
+      "rule_score": 1.0,
+      "judge_score": 1.0,
+      "judge_reasoning": "The output explicitly rejects the customer's urgent tone by identifying that there is no business impact, data is unaffected, and a workaround exists. Furthermore, the draft response remains courteous and professional while explaining that the request is logged as a feature request.",
+      "criteria": [
+        {
+          "name": "not escalated to P1",
+          "passed": true,
+          "weight": 3.0,
+          "critical": true,
+          "error": null
+        },
+        {
+          "name": "rated P3 or P4",
+          "passed": true,
+          "weight": 2.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "urgency reasoning cites impact",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "draft stays professional",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        }
+      ],
+      "failed_criteria": [],
+      "critical_failures": [],
+      "error": null,
+      "prompt_version": "triage@1.4.0",
+      "model": "gemini-3.5-flash-lite",
+      "cached": true
+    },
+    {
+      "case_id": "T7-adversarial-sparse",
+      "task": "triage",
+      "description": "ADVERSARIAL: near-empty ticket (a real body truncated to its first few words). Must not fabricate specifics; must ask for human review.",
+      "adversarial": true,
+      "passed": true,
+      "quality_score": 1.0,
+      "rule_score": 1.0,
+      "judge_score": 1.0,
+      "judge_reasoning": "The output successfully avoids inventing specifics such as versions, error codes, or user counts despite the ticket being almost empty.",
+      "criteria": [
+        {
+          "name": "flagged for human review",
+          "passed": true,
+          "weight": 3.0,
+          "critical": true,
+          "error": null
+        },
+        {
+          "name": "confidence is low",
+          "passed": true,
+          "weight": 2.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "review reason recorded",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "still returns a valid urgency",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        }
+      ],
+      "failed_criteria": [],
+      "critical_failures": [],
+      "error": null,
+      "prompt_version": "triage@1.4.0",
+      "model": "gemini-3.5-flash-lite",
+      "cached": true
+    },
+    {
+      "case_id": "B1",
+      "task": "account_brief",
+      "description": "At-risk account produces a summary, risks and talking points",
+      "adversarial": false,
+      "passed": true,
+      "quality_score": 1.0,
+      "rule_score": 1.0,
+      "judge_score": 1.0,
+      "judge_reasoning": "The executive summary explicitly names real numbers such as $120,000 ARR, 938 active seats, 1807 licensed seats, October 2025 customer date, 4 days ago, zero active integrations, 5 tickets, and a 2.83 out of 5 satisfaction score, avoiding generic filler entirely.",
+      "criteria": [
+        {
+          "name": "summary is 3-5 sentences",
+          "passed": true,
+          "weight": 2.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "at least one open risk",
+          "passed": true,
+          "weight": 2.0,
+          "critical": true,
+          "error": null
+        },
+        {
+          "name": "3-5 talking points",
+          "passed": true,
+          "weight": 2.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "every risk carries evidence",
+          "passed": true,
+          "weight": 1.5,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "stats computed",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        }
+      ],
+      "failed_criteria": [],
+      "critical_failures": [],
+      "error": null,
+      "prompt_version": "account_risk@1.0.0 -> account_brief@1.0.0",
+      "model": "gemini-3.5-flash-lite",
+      "cached": true
+    },
+    {
+      "case_id": "B2",
+      "task": "account_brief",
+      "description": "Churning account: churn signals must be quote-backed and verified",
+      "adversarial": false,
+      "passed": true,
+      "quality_score": 1.0,
+      "rule_score": 1.0,
+      "judge_score": 1.0,
+      "judge_reasoning": "The provided output correctly includes specific, direct evidence (quotes or data points) for each flagged risk that directly and accurately corresponds to the stated signal and source data.",
+      "criteria": [
+        {
+          "name": "all signals verified",
+          "passed": true,
+          "weight": 3.0,
+          "critical": true,
+          "error": null
+        },
+        {
+          "name": "quotes exist verbatim in the cited tickets",
+          "passed": true,
+          "weight": 3.0,
+          "critical": true,
+          "error": null
+        },
+        {
+          "name": "each signal has a rationale",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "summary is 3-5 sentences",
+          "passed": true,
+          "weight": 1.5,
+          "critical": false,
+          "error": null
+        }
+      ],
+      "failed_criteria": [],
+      "critical_failures": [],
+      "error": null,
+      "prompt_version": "account_risk@1.0.0 -> account_brief@1.0.0",
+      "model": "gemini-3.5-flash-lite",
+      "cached": true
+    },
+    {
+      "case_id": "B3",
+      "task": "account_brief",
+      "description": "Healthy account should not be dressed up as a crisis",
+      "adversarial": false,
+      "passed": true,
+      "quality_score": 0.85,
+      "rule_score": 1.0,
+      "judge_score": 0.5,
+      "judge_reasoning": "Despite the account being marked Healthy in the prompt, the output manufactures severe alarm by claiming the account 'faces severe delivery risk' and heavily emphasizing unresolved data loss tickets as a primary crisis, failing to reflect the Healthy status proportionately.",
+      "criteria": [
+        {
+          "name": "summary is 3-5 sentences",
+          "passed": true,
+          "weight": 2.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "no fabricated churn signals",
+          "passed": true,
+          "weight": 2.0,
+          "critical": true,
+          "error": null
+        },
+        {
+          "name": "talking points present",
+          "passed": true,
+          "weight": 1.5,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "high-severity risks are not invented",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        }
+      ],
+      "failed_criteria": [],
+      "critical_failures": [],
+      "error": null,
+      "prompt_version": "account_risk@1.0.0 -> account_brief@1.0.0",
+      "model": "gemini-3.5-flash-lite",
+      "cached": true
+    },
+    {
+      "case_id": "B4",
+      "task": "account_brief",
+      "description": "Determinism: the same account twice must be byte-identical",
+      "adversarial": false,
+      "passed": true,
+      "quality_score": 1.0,
+      "rule_score": 1.0,
+      "judge_score": null,
+      "judge_reasoning": "",
+      "criteria": [
+        {
+          "name": "second run is identical",
+          "passed": true,
+          "weight": 3.0,
+          "critical": true,
+          "error": null
+        }
+      ],
+      "failed_criteria": [],
+      "critical_failures": [],
+      "error": null,
+      "prompt_version": "account_risk@1.0.0 -> account_brief@1.0.0",
+      "model": "gemini-3.5-flash-lite",
+      "cached": true
+    },
+    {
+      "case_id": "B5",
+      "task": "account_brief",
+      "description": "Data gaps are disclosed rather than papered over",
+      "adversarial": false,
+      "passed": true,
+      "quality_score": 1.0,
+      "rule_score": 1.0,
+      "judge_score": null,
+      "judge_reasoning": "",
+      "criteria": [
+        {
+          "name": "data gaps reported",
+          "passed": true,
+          "weight": 2.0,
+          "critical": true,
+          "error": null
+        },
+        {
+          "name": "account_id resolution gap disclosed",
+          "passed": true,
+          "weight": 2.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "window recorded in stats",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        }
+      ],
+      "failed_criteria": [],
+      "critical_failures": [],
+      "error": null,
+      "prompt_version": "account_risk@1.0.0 -> account_brief@1.0.0",
+      "model": "gemini-3.5-flash-lite",
+      "cached": true
+    },
+    {
+      "case_id": "B6-adversarial-no-tickets",
+      "task": "account_brief",
+      "description": "ADVERSARIAL: incomplete account data - ticket history withheld. Must report the gap and must not invent a ticket history.",
+      "adversarial": true,
+      "passed": true,
+      "quality_score": 1.0,
+      "rule_score": 1.0,
+      "judge_score": 1.0,
+      "judge_reasoning": "The brief explicitly notes under data gaps that no tickets were found for Apex Dynamics, fulfilling the requirement plainly without implying it reviewed unseen tickets.",
+      "criteria": [
+        {
+          "name": "no churn signals invented",
+          "passed": true,
+          "weight": 3.0,
+          "critical": true,
+          "error": null
+        },
+        {
+          "name": "missing history disclosed",
+          "passed": true,
+          "weight": 3.0,
+          "critical": true,
+          "error": null
+        },
+        {
+          "name": "ticket total is zero",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        },
+        {
+          "name": "still produces a summary",
+          "passed": true,
+          "weight": 1.0,
+          "critical": false,
+          "error": null
+        }
+      ],
+      "failed_criteria": [],
+      "critical_failures": [],
+      "error": null,
+      "prompt_version": "account_risk@1.0.0 -> account_brief@1.0.0",
+      "model": "gemini-3.5-flash-lite",
+      "cached": true
+    }
+  ]
+}

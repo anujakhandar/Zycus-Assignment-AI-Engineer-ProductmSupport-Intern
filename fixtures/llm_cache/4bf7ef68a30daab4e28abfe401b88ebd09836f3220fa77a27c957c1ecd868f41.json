@@ -1,0 +1,20 @@
+{
+  "input_tokens": 1842,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 377,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4464,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 1945,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "account": "ACC-2944",
+    "prompt": "account_risk@1.0.0",
+    "task": "account_risk"
+  },
+  "text": "{\n  \"open_risks\": [\n    {\n      \"risk\": \"Health status set to Churning\",\n      \"severity\": \"High\",\n      \"evidence\": \"Churning\",\n      \"source\": \"health_status\"\n    },\n    {\n      \"risk\": \"Loss of internal champion without identified replacement\",\n      \"severity\": \"High\",\n      \"evidence\": \"Champion left the company — no replacement identified yet\",\n      \"source\": \"escalation_notes\"\n    },\n    {\n      \"risk\": \"Active evaluation of competing vendors\",\n      \"severity\": \"High\",\n      \"evidence\": \"Decision maker considering competing vendor evaluation\",\n      \"source\": \"escalation_notes\"\n    },\n    {\n      \"risk\": \"Extended period of user inactivity\",\n      \"severity\": \"High\",\n      \"evidence\": \"41 days\",\n      \"source\": \"last_login_days_ago\"\n    },\n    {\n      \"risk\": \"Declining usage trend\",\n      \"severity\": \"High\",\n      \"evidence\": \"Declining\",\n      \"source\": \"usage_trend\"\n    },\n    {\n      \"risk\": \"High concentration of recent P1 tickets\",\n      \"severity\": \"High\",\n      \"evidence\": \"2\",\n      \"source\": \"p1_tickets_last_30d\"\n    },\n    {\n      \"risk\": \"Customer response time frustration noted in sync\",\n      \"severity\": \"Medium\",\n      \"evidence\": \"Customer expressed frustration with response times in last sync\",\n      \"source\": \"escalation_notes\"\n    }\n  ],\n  \"churn_signals\": []\n}"
+}

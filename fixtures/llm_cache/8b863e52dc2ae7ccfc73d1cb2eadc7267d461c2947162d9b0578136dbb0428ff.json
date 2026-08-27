@@ -1,0 +1,19 @@
+{
+  "input_tokens": 437,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 75,
+  "request": {
+    "max_output_tokens": 512,
+    "message_chars": 1362,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 659,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "case": "T3",
+    "task": "judge"
+  },
+  "text": "```json\n{\"score\": 1.0, \"reasoning\": \"The draft concretely addresses the upgrade request by specifically mentioning the Enterprise plan, SSO/SAML, dedicated TAM, SLA guarantees, and providing exact steps (Settings \\u2192 Billing \\u2192 Contact Sales) rather than just giving a generic response.\"}\n```"
+}

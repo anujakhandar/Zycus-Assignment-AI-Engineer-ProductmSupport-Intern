@@ -1,0 +1,19 @@
+{
+  "input_tokens": 707,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 64,
+  "request": {
+    "max_output_tokens": 512,
+    "message_chars": 2187,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 659,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "case": "B3",
+    "task": "judge"
+  },
+  "text": "```json\n{\"score\": 0.5, \"reasoning\": \"Despite the account being marked Healthy in the prompt, the output manufactures severe alarm by claiming the account 'faces severe delivery risk' and heavily emphasizing unresolved data loss tickets as a primary crisis, failing to reflect the Healthy status proportionately.\"}\n```"
+}

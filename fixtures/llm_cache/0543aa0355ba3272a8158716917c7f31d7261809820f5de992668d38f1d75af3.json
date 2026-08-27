@@ -1,0 +1,19 @@
+{
+  "input_tokens": 2102,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 347,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4146,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4747,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.4.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\":      {\"value\": \"WorkflowEngine\",  \"reasoning\": \"The ticket explicitly names WorkflowEngine as the product.\", \"confidence\": 1.0},\n  \"product_area\": {\"value\": \"Triggers\",     \"reasoning\": \"Error references an action field mapping which falls under Triggers/Actions.\", \"confidence\": 0.6},\n  \"category\":     {\"value\": \"Bug\", \"reasoning\": \"Users are encountering an configuration error when attempting authentication.\", \"confidence\": 0.7},\n  \"urgency\":      {\"value\": \"P2\",    \"reasoning\": \"492 users are blocked from accessing the platform, representing major impact to the organisation.\", \"confidence\": 0.9},\n  \"known_issue\": \"New Users Cannot Authenticate via SSO\",\n  \"cited_chunk_ids\": [\"troubleshooting/performance-and-integrations.md#06\", \"troubleshooting/authentication-sso.md#03\"],\n  \"responder_team\": \"Tier-1 Support\",\n  \"routing_reasoning\": \"Authentication and configuration troubleshooting steps fall under Tier-1 Support.\",\n  \"draft_response\": \"Hello, thank you for reaching out to support regarding the SSO issues for new joiners in WorkflowEngine. We understand that 492 users are currently blocked from accessing the platform. Please check your action field mappings and verify whether the new user's IDP group has been mapped to a product role under Settings → SSO → Group Mapping. Could you please confirm if the user's primary IDP group appears in that list?\"\n}"
+}

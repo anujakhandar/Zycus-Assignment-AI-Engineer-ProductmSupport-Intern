@@ -1,0 +1,19 @@
+{
+  "input_tokens": 2069,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 308,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4350,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4066,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.2.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\":      {\"value\": \"CloudSync\", \"reasoning\": \"The ticket explicitly names CloudSync.\", \"confidence\": 1.0},\n  \"product_area\": {\"value\": \"Bandwidth Limits\", \"reasoning\": \"The user reports an error when accessing the Bandwidth Limits module.\", \"confidence\": 1.0},\n  \"category\":     {\"value\": \"Bug\", \"reasoning\": \"A consistent error is occurring when attempting to use a feature after an update.\", \"confidence\": 0.9},\n  \"urgency\":      {\"value\": \"P2\", \"reasoning\": \"The issue affects all users in the organisation when attempting to use a core module with a painful workaround or blockage.\", \"confidence\": 0.8},\n  \"known_issue\": null,\n  \"cited_chunk_ids\": [],\n  \"responder_team\": \"Tier-2 Support\",\n  \"routing_reasoning\": \"Reproducible defects and errors in the application route to Tier-2 Support.\",\n  \"draft_response\": \"Hello, thank you for reaching out to CloudSync support. We have received your report regarding the error when accessing the Bandwidth Limits module and understand this is affecting all users in your organisation. Our Tier-2 Support team will investigate the reported behavior and follow up with you. To help us troubleshoot, could you please provide a screenshot of the error and confirm if any other modules are affected?\"\n}"
+}

@@ -1,0 +1,20 @@
+{
+  "input_tokens": 2365,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 286,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 6379,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 1945,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "account": "ACC-1256",
+    "prompt": "account_risk@1.0.0",
+    "task": "account_risk"
+  },
+  "text": "{\n  \"open_risks\": [\n    {\n      \"risk\": \"Low seat utilisation\",\n      \"severity\": \"High\",\n      \"evidence\": \"938 active seats out of 1807 licensed seats\",\n      \"source\": \"seats_active\"\n    },\n    {\n      \"risk\": \"Active escalation regarding competing vendor evaluation\",\n      \"severity\": \"High\",\n      \"evidence\": \"Decision maker considering competing vendor evaluation\",\n      \"source\": \"escalation_notes\"\n    },\n    {\n      \"risk\": \"Active integration reliability concerns\",\n      \"severity\": \"High\",\n      \"evidence\": \"IT team flagged integration reliability concerns\",\n      \"source\": \"escalation_notes\"\n    },\n    {\n      \"risk\": \"Low mean satisfaction score across support tickets\",\n      \"severity\": \"Medium\",\n      \"evidence\": \"Mean satisfaction is 2.83 out of 5\",\n      \"source\": \"mean_satisfaction\"\n    },\n    {\n      \"risk\": \"Zero active integrations deployed\",\n      \"severity\": \"Medium\",\n      \"evidence\": \"integrations_active list is empty\",\n      \"source\": \"integrations_active\"\n    }\n  ],\n  \"churn_signals\": []\n}"
+}

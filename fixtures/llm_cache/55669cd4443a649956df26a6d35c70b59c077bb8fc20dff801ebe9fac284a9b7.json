@@ -1,0 +1,20 @@
+{
+  "input_tokens": 1079,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 303,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 2274,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 1142,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "account": "ACC-1256",
+    "prompt": "account_brief@1.0.0",
+    "task": "account_brief"
+  },
+  "text": "{\n  \"executive_summary\": \"Apex Dynamics is an EU-West manufacturing customer on the Starter tier paying $120,000 ARR with 938 active seats out of 1807 licensed seats and a customer since October 2025. Despite an increasing usage trend and a recent login 4 days ago, the account is marked At Risk due to an active escalation involving a competing vendor evaluation and IT team concerns over integration reliability. Furthermore, they have zero active integrations deployed, 5 tickets tied to AnalyticsHub, and a low mean support satisfaction score of 2.83 out of 5. The single most important thing for this call is to address the IT team's integration reliability concerns and counter the evaluation of competing vendors.\",\n  \"talking_points\": [\n    \"Address the active escalation regarding the competing vendor evaluation with Director of Infrastructure Casey Brown, noting the decision maker is currently considering alternative vendors.\",\n    \"Investigate the IT team's integration reliability concerns and review why zero active integrations are currently deployed despite having 5 tickets logged for AnalyticsHub.\",\n    \"Review low seat utilisation, addressing the gap between 938 active seats and 1807 licensed seats.\",\n    \"Address the low mean support satisfaction score of 2.83 across 11 tickets in the last 90 days, specifically focusing on the 2 Data Loss and 2 Bug tickets.\"\n  ]\n}"
+}

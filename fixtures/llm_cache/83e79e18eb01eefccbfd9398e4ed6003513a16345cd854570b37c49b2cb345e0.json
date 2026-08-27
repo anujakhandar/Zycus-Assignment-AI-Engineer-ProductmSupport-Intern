@@ -1,0 +1,19 @@
+{
+  "input_tokens": 2021,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 313,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4133,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4437,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.3.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\":      {\"value\": \"DataBridge Pro\",  \"reasoning\": \"The ticket explicitly names DataBridge Pro.\", \"confidence\": 1.0},\n  \"product_area\": {\"value\": \"Data Ingestion\",  \"reasoning\": \"The ticket specifies the Data Ingestion module.\", \"confidence\": 1.0},\n  \"category\":     {\"value\": \"Feature Request\", \"reasoning\": \"The customer is asking for a new bulk archive capability that is not currently supported.\", \"confidence\": 1.0},\n  \"urgency\":      {\"value\": \"P4\",              \"reasoning\": \"The request is for a missing feature with a manual workaround available, resulting in low impact.\", \"confidence\": 0.9},\n  \"known_issue\": null,\n  \"cited_chunk_ids\": [],\n  \"responder_team\": \"Product Management\",\n  \"routing_reasoning\": \"Feature requests are routed to Product Management for evaluation.\",\n  \"draft_response\": \"Hello, thank you for reaching out to the DataBridge Pro support team. We have received your request for a bulk archive feature in the Data Ingestion module to help manage your 116 users. I have logged this feature request with our Product Management team for consideration in future updates. In the meantime, please continue using the manual one-by-one archive process as your current workaround. Let us know if you have any additional questions or feedback.\"\n}"
+}

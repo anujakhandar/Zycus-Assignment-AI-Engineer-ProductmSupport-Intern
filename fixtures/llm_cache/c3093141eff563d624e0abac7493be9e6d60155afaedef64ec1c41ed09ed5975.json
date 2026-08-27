@@ -1,0 +1,20 @@
+{
+  "input_tokens": 864,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 272,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 1800,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 1142,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "account": "ACC-1256",
+    "prompt": "account_brief@1.0.0",
+    "task": "account_brief"
+  },
+  "text": "{\n  \"executive_summary\": \"Apex Dynamics is a manufacturing sector customer on the Starter plan paying $120,000 in ARR, with 938 active seats out of 1807 licensed and tenure starting October 5, 2025. Despite an increasing usage trend and 0 active tickets, the account is marked 'At Risk' due to severe adoption and competitive threats, including zero active integrations and the IT team flagging integration reliability concerns. Furthermore, primary contact and Director of Infrastructure Casey Brown is considering a competing vendor evaluation. The single most important thing for this call is to directly address the integration reliability concerns and map out a strategy to drive utilization of the 869 inactive seats.\",\n  \"talking_points\": [\n    \"Address the IT team's integration reliability concerns directly and investigate why integrations_active is completely empty despite the account utilizing SecureVault, AnalyticsHub, and CloudSync.\",\n    \"Engage Director of Infrastructure Casey Brown on the active consideration of a competing vendor evaluation and identify what specific gaps are driving this.\",\n    \"Address the low seat utilization where only 938 of 1807 licensed seats are active to ensure they are getting full ROI on their $120,000 ARR Starter plan.\"\n  ]\n}"
+}

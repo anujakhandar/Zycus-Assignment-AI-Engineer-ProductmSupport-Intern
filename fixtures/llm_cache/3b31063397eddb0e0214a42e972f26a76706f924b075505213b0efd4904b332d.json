@@ -1,0 +1,19 @@
+{
+  "input_tokens": 2023,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 309,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4041,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4437,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.3.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\":      {\"value\": \"CloudSync\", \"reasoning\": \"The ticket explicitly names CloudSync.\", \"confidence\": 1.0},\n  \"product_area\": {\"value\": \"Conflict Resolution\", \"reasoning\": \"The ticket explicitly refers to the Conflict Resolution module.\", \"confidence\": 1.0},\n  \"category\":     {\"value\": \"Data Loss\", \"reasoning\": \"The customer reports missing critical records and data risk in operations.\", \"confidence\": 0.9},\n  \"urgency\":      {\"value\": \"P1\", \"reasoning\": \"The customer states business continuity is at risk and HR operations are affected with missing records.\", \"confidence\": 0.9},\n  \"known_issue\": null,\n  \"cited_chunk_ids\": [\"products/cloudsync.md#01\"],\n  \"responder_team\": \"Tier-2 Support\",\n  \"routing_reasoning\": \"Data discrepancies and conflict resolution issues require Tier-2 technical support investigation.\",\n  \"draft_response\": \"Hello, thank you for reaching out to CloudSync support. We understand that you are experiencing missing records in the Conflict Resolution module affecting your HR team operations. Our team is reviewing the details of your sync job. To help us investigate further, could you please provide the conflict report or any recent job logs from your sync settings? We are on it and will follow up as soon as we have more information.\"\n}"
+}

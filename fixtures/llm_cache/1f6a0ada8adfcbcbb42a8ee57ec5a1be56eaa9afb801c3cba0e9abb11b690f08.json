@@ -1,0 +1,19 @@
+{
+  "input_tokens": 414,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 63,
+  "request": {
+    "max_output_tokens": 512,
+    "message_chars": 1298,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 659,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "case": "T1",
+    "task": "judge"
+  },
+  "text": "```json\n{\"score\": 0.5, \"reasoning\": \"The draft response acknowledges the missing data and gives a concrete next step (asking for logs), but it fails to address the potential data loss with appropriate seriousness or explicitly avoid promising recovery, reading more like a standard routine inquiry.\"}\n```"
+}

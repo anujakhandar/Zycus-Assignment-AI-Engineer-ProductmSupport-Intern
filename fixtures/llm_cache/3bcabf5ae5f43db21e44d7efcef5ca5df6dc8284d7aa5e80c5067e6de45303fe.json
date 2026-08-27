@@ -1,0 +1,20 @@
+{
+  "input_tokens": 1133,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 368,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 1843,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 1945,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "account": "ACC-1785",
+    "prompt": "account_risk@1.0.0",
+    "task": "account_risk"
+  },
+  "text": "{\n  \"open_risks\": [\n    {\n      \"risk\": \"Inactive last login\",\n      \"severity\": \"High\",\n      \"evidence\": \"47 days\",\n      \"source\": \"last_login_days_ago\"\n    },\n    {\n      \"risk\": \"Account health marked as At Risk\",\n      \"severity\": \"High\",\n      \"evidence\": \"At Risk\",\n      \"source\": \"health_status\"\n    },\n    {\n      \"risk\": \"Procurement pricing review requested\",\n      \"severity\": \"Medium\",\n      \"evidence\": \"Procurement team requested pricing review\",\n      \"source\": \"escalation_notes\"\n    },\n    {\n      \"risk\": \"Negative sentiment detected in support tickets\",\n      \"severity\": \"High\",\n      \"evidence\": \"Negative sentiment detected in recent support tickets\",\n      \"source\": \"escalation_notes\"\n    },\n    {\n      \"risk\": \"Recent P1 ticket in the last 30 days\",\n      \"severity\": \"High\",\n      \"evidence\": \"1\",\n      \"source\": \"p1_tickets_last_30d\"\n    }\n  ],\n  \"churn_signals\": [\n    {\n      \"ticket_id\": \"TKT-10112\",\n      \"quote\": \"We're experiencing a critical issue with CloudSync. Our Conflict Resolution pipeline has been failing since approximately 2 hours ago.\",\n      \"signal\": \"Critical pipeline failure impacting users\",\n      \"rationale\": \"Indicates high user friction and operational disruption in production affecting a large user count.\"\n    }\n  ]\n}"
+}

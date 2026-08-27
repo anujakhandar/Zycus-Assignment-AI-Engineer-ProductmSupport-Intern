@@ -1,0 +1,19 @@
+{
+  "input_tokens": 1936,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 297,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 3852,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4066,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.2.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\":      {\"value\": \"CloudSync\", \"reasoning\": \"The ticket explicitly names CloudSync.\", \"confidence\": 1.0},\n  \"product_area\": {\"value\": \"Bandwidth Limits\", \"reasoning\": \"The ticket specifies the Bandwidth Limits module.\", \"confidence\": 1.0},\n  \"category\":     {\"value\": \"Bug\", \"reasoning\": \"The user is reporting a consistent error message ('SCHEMA_MISMATCH') after an update.\", \"confidence\": 0.9},\n  \"urgency\":      {\"value\": \"P3\", \"reasoning\": \"An error occurs during export in a specific module for all users in the organization, but core syncing is not described as completely down.\", \"confidence\": 0.8},\n  \"known_issue\": null,\n  \"cited_chunk_ids\": [],\n  \"responder_team\": \"Tier-2 Support\",\n  \"routing_reasoning\": \"Reproducible defects and errors are routed to Tier-2 Support.\",\n  \"draft_response\": \"Hello, thank you for reaching out to CloudSync support. We have received your report regarding the schema mismatch error when accessing the Bandwidth Limits module and attempting to export records. Our Tier-2 Support team will investigate this behavior further. In the meantime, please provide your current CloudSync version and any additional diagnostic logs if available.\"\n}"
+}

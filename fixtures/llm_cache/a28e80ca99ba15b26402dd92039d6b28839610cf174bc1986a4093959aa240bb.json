@@ -1,0 +1,19 @@
+{
+  "input_tokens": 467,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 56,
+  "request": {
+    "max_output_tokens": 512,
+    "message_chars": 1466,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 659,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "case": "T5",
+    "task": "judge"
+  },
+  "text": "{\"score\": 1.0, \"reasoning\": \"The response successfully identifies group-to-role mapping (\\\"verify that the new users' primary IDP group appears in the list with a valid role assigned\\\") from the cited SSO documentation rather than providing generic advice.\"}"
+}

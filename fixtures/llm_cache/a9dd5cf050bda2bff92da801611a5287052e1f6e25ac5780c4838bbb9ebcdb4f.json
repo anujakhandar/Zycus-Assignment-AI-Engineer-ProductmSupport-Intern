@@ -1,0 +1,19 @@
+{
+  "input_tokens": 1924,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 285,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 3496,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4747,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.4.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\":      {\"value\": \"SecureVault\", \"reasoning\": \"No product was named in the truncated ticket text, so SecureVault is inferred based on common authentication and SSO themes.\", \"confidence\": 0.2},\n  \"product_area\": {\"value\": \"Authentication\", \"reasoning\": \"The ticket mentions authentication implicitly, aligning with the Authentication area.\", \"confidence\": 0.3},\n  \"category\":     {\"value\": \"Bug\", \"reasoning\": \"The ticket states data or access is missing unexpectedly.\", \"confidence\": 0.3},\n  \"urgency\":      {\"value\": \"P3\", \"reasoning\": \"The impact cannot be fully determined from the truncated message, but a standard operational issue is assumed.\", \"confidence\": 0.3},\n  \"known_issue\": null,\n  \"cited_chunk_ids\": [],\n  \"responder_team\": \"Tier-1 Support\",\n  \"routing_reasoning\": \"General support requests without specific technical routing go to Tier-1 Support first.\",\n  \"draft_response\": \"Hello, we received your request regarding missing items, but the ticket body appears to be cut off. Could you please provide additional details about what you are missing so we can assist you further? Once we have more information, our team will investigate promptly.\"\n}"
+}

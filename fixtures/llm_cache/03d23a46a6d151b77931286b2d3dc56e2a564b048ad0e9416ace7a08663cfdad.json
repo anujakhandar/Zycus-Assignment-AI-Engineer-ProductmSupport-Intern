@@ -1,0 +1,20 @@
+{
+  "input_tokens": 919,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 271,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 1231,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 1945,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "account": "ACC-1256",
+    "prompt": "account_risk@1.0.0",
+    "task": "account_risk"
+  },
+  "text": "{\n  \"open_risks\": [\n    {\n      \"risk\": \"Low seat utilization\",\n      \"severity\": \"High\",\n      \"evidence\": \"938 active seats out of 1807 licensed seats\",\n      \"source\": \"seats_active\"\n    },\n    {\n      \"risk\": \"Competitor evaluation\",\n      \"severity\": \"High\",\n      \"evidence\": \"Decision maker considering competing vendor evaluation\",\n      \"source\": \"escalation_notes\"\n    },\n    {\n      \"risk\": \"Integration reliability concerns\",\n      \"severity\": \"High\",\n      \"evidence\": \"IT team flagged integration reliability concerns\",\n      \"source\": \"escalation_notes\"\n    },\n    {\n      \"risk\": \"Zero active integrations\",\n      \"severity\": \"High\",\n      \"evidence\": \"integrations_active is empty for an account with multiple products\",\n      \"source\": \"integrations_active\"\n    },\n    {\n      \"risk\": \"Poor health status\",\n      \"severity\": \"High\",\n      \"evidence\": \"At Risk\",\n      \"source\": \"health_status\"\n    }\n  ],\n  \"churn_signals\": []\n}"
+}

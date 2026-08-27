@@ -1,0 +1,19 @@
+{
+  "input_tokens": 1949,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 304,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4133,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4066,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.2.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\":      {\"value\": \"DataBridge Pro\",  \"reasoning\": \"The ticket explicitly names DataBridge Pro.\", \"confidence\": 1.0},\n  \"product_area\": {\"value\": \"Data Ingestion\", \"reasoning\": \"The ticket explicitly references the Data Ingestion module.\", \"confidence\": 1.0},\n  \"category\":     {\"value\": \"Feature Request\", \"reasoning\": \"The customer is asking for a new bulk archive capability that is currently not supported.\", \"confidence\": 1.0},\n  \"urgency\":      {\"value\": \"P4\",    \"reasoning\": \"Despite the word urgent in the text, the issue describes a lack of a scaling feature rather than a production outage, data loss, or stopped business.\", \"confidence\": 0.9},\n  \"known_issue\": null,\n  \"cited_chunk_ids\": [],\n  \"responder_team\": \"Product Management\",\n  \"routing_reasoning\": \"Feature requests are routed to Product Management.\",\n  \"draft_response\": \"Hello, thank you for reaching out to share your feedback regarding DataBridge Pro and the Data Ingestion module. I have logged your request for bulk archiving operations to help manage your usage as your team scales. Our Product Management team reviews all feature requests for future roadmap planning. If you have any additional details to share about your workflow needs, please let us know.\"\n}"
+}

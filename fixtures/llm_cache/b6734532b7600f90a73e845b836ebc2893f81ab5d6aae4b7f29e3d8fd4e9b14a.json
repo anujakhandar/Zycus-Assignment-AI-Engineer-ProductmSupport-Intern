@@ -1,0 +1,20 @@
+{
+  "input_tokens": 1026,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 244,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 1930,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 1142,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "account": "ACC-1785",
+    "prompt": "account_brief@1.0.0",
+    "task": "account_brief"
+  },
+  "text": "{\n  \"executive_summary\": \"Cyberdyne Systems is a Technology sector customer on the Starter plan with $12,000 ARR, utilizing SecureVault across 563 active seats since November 2024. The account is classified as At Risk with a mean CSAT of 2.29, 47 days of inactivity, and a procurement request for a pricing review. The single most important focus for this call is addressing the low satisfaction scores, user inactivity, and procurement's pricing concerns ahead of the May 2027 renewal.\",\n  \"talking_points\": [\n    \"Address the procurement team's pricing review request directly, as noted in the escalation notes.\",\n    \"Investigate the 47-day login gap and low engagement with primary contact Morgan Davis to reverse the At Risk health status.\",\n    \"Review recent support history—specifically the 12 total tickets with a 2.29 mean satisfaction score—to address unresolved issues.\",\n    \"Discuss seat utilization (563 active out of 610 licensed seats) to ensure value realization on the SecureVault product.\"\n  ]\n}"
+}

@@ -1,0 +1,19 @@
+{
+  "input_tokens": 762,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 94,
+  "request": {
+    "max_output_tokens": 512,
+    "message_chars": 2662,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 659,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "case": "B1",
+    "task": "judge"
+  },
+  "text": "```json\n{\"score\": 1.0, \"reasoning\": \"The executive summary explicitly names real numbers such as $120,000 ARR, 938 active seats, 1807 licensed seats, October 2025 customer date, 4 days ago, zero active integrations, 5 tickets, and a 2.83 out of 5 satisfaction score, avoiding generic filler entirely.\"}\n```"
+}

@@ -1,0 +1,19 @@
+{
+  "input_tokens": 1981,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 335,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4244,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4066,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.2.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\":      {\"value\": \"CloudSync\",  \"reasoning\": \"The ticket explicitly names CloudSync as the affected product.\", \"confidence\": 1.0},\n  \"product_area\": {\"value\": \"File Sync\",  \"reasoning\": \"While the issue is SSO-related, CloudSync does not have an authentication area in its catalogue; File Sync is selected from the available CloudSync areas.\", \"confidence\": 0.4},\n  \"category\":     {\"value\": \"How-To\", \"reasoning\": \"The issue involves configuring or mapping new users for SSO access rather than a system bug.\", \"confidence\": 0.7},\n  \"urgency\":      {\"value\": \"P1\", \"reasoning\": \"308 people are blocked from accessing the platform.\", \"confidence\": 1.0},\n  \"known_issue\": \"New Users Cannot Authenticate via SSO\",\n  \"cited_chunk_ids\": [\"troubleshooting/authentication-sso.md#03\"],\n  \"responder_team\": \"Security Engineering\",\n  \"routing_reasoning\": \"Authentication and SSO issues are handled by Security Engineering.\",\n  \"draft_response\": \"Hello, thank you for reaching out to support. We understand that new joiners are currently unable to authenticate via SSO. As a next step, please log in as an admin, navigate to Settings → SSO → Group Mapping, and verify that the new users' IDP groups are mapped to a product role. Please let us know if the issue persists after confirming your group mappings.\"\n}"
+}

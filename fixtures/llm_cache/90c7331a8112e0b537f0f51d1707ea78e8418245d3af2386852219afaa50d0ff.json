@@ -1,0 +1,20 @@
+{
+  "input_tokens": 1108,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 308,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 2398,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 1142,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "account": "ACC-2944",
+    "prompt": "account_brief@1.0.0",
+    "task": "account_brief"
+  },
+  "text": "{\n  \"executive_summary\": \"Pinnacle Systems is a Starter tier manufacturing customer at $48,000 ARR, utilizing SecureVault with 289 active seats out of 329 licensed since June 2025. The account is currently marked as Churning with a declining usage trend, 41 days of inactivity, and an active evaluation of competing vendors by the decision maker following the departure of their internal champion. Additionally, the account experienced 2 P1 tickets in the last 30 days and customer frustration over response times. The single most important goal for this call is to address the response time complaints, secure a new internal champion, and counter the competing vendor evaluation before the June 24, 2026 renewal.\",\n  \"talking_points\": [\n    \"Address the decision maker directly regarding their active evaluation of competing vendors and determine what feature or service gaps are driving this risk.\",\n    \"Establish a plan to identify and engage a new internal champion to replace the departed contact, as the account currently lacks an identified replacement.\",\n    \"Investigate the root cause of the 2 P1 tickets from the last 30 days and acknowledge the customer's frustration with response times raised in the last sync.\",\n    \"Review the declining usage trend and 41 days of user inactivity, proposing an onboarding or re-engagement plan for the 40 inactive seats out of 329 licensed.\"\n  ]\n}"
+}

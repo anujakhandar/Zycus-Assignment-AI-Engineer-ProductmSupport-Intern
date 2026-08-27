@@ -1,0 +1,19 @@
+{
+  "input_tokens": 2141,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 319,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4350,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4437,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.3.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\":      {\"value\": \"CloudSync\", \"reasoning\": \"The customer explicitly names CloudSync in the subject and body.\", \"confidence\": 1.0},\n  \"product_area\": {\"value\": \"Bandwidth Limits\", \"reasoning\": \"The customer states they are trying to access the Bandwidth Limits module.\", \"confidence\": 1.0},\n  \"category\":     {\"value\": \"Bug\", \"reasoning\": \"The customer reports a consistent error after an update when performing standard actions.\", \"confidence\": 0.9},\n  \"urgency\":      {\"value\": \"P2\", \"reasoning\": \"A core workflow is broken for all users in the organisation with an error appearing during access.\", \"confidence\": 0.8},\n  \"known_issue\": null,\n  \"cited_chunk_ids\": [\"products/databridge-pro.md#01\"],\n  \"responder_team\": \"Tier-2 Support\",\n  \"routing_reasoning\": \"Reproducible software defects and errors should be handled by Tier-2 Support.\",\n  \"draft_response\": \"Hello, thank you for reaching out to CloudSync support. I understand you are seeing a SCHEMA_MISMATCH error when accessing the Bandwidth Limits module for all users following the latest update. To help us investigate this further, could you please provide any additional logs or details surrounding the export attempt? Our team will look into this behaviour and follow up with you as soon as possible.\"\n}"
+}

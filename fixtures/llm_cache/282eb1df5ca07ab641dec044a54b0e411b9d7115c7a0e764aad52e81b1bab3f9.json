@@ -1,0 +1,20 @@
+{
+  "input_tokens": 977,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 267,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 1966,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 1142,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "account": "ACC-1785",
+    "prompt": "account_brief@1.0.0",
+    "task": "account_brief"
+  },
+  "text": "{\n  \"executive_summary\": \"Cyberdyne Systems is a Technology sector customer on the Starter plan with $12,000 ARR, 563 active seats, and a renewal date of May 18, 2027. The account is marked At Risk due to 47 days of inactivity, 1 P1 ticket in the last 30 days regarding a critical CloudSync pipeline failure, negative support ticket sentiment, and a procurement team request for a pricing review. The single most important thing for this call is to address the critical CloudSync failure and the procurement pricing review to mitigate immediate churn risk.\",\n  \"talking_points\": [\n    \"Address the critical CloudSync issue documented in TKT-10112 regarding the Conflict Resolution pipeline failure to resolve negative sentiment from recent support interactions.\",\n    \"Discuss the procurement team's requested pricing review to address their commercial concerns ahead of the May 2027 renewal.\",\n    \"Investigate the account inactivity by noting the 47 days since last login and engagement plan with primary contact Morgan Davis (Platform Lead).\",\n    \"Review the recent P1 ticket logged within the last 30 days to ensure system stability across the single active SecureVault product.\"\n  ]\n}"
+}

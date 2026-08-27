@@ -1,0 +1,19 @@
+{
+  "input_tokens": 1820,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 327,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4146,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 3452,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.1.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\": {\n    \"value\": \"SecureVault\",\n    \"reasoning\": \"SSO configuration and authentication issues belong to SecureVault.\",\n    \"confidence\": 0.8\n  },\n  \"product_area\": {\n    \"value\": \"Authentication\",\n    \"reasoning\": \"The issue involves new users failing to authenticate via SSO.\",\n    \"confidence\": 0.9\n  },\n  \"category\": {\n    \"value\": \"Bug\",\n    \"reasoning\": \"An unexpected error INVALID_CONFIGURATION occurs during user authentication.\",\n    \"confidence\": 0.7\n  },\n  \"urgency\": {\n    \"value\": \"P1\",\n    \"reasoning\": \"492 users are blocked from accessing the platform due to an authentication failure.\",\n    \"confidence\": 0.9\n  },\n  \"known_issue\": null,\n  \"cited_chunk_ids\": [],\n  \"responder_team\": \"Security Engineering\",\n  \"routing_reasoning\": \"Authentication and SSO issues are handled by Security Engineering.\",\n  \"draft_response\": \"Hello, thank you for reaching out to support. We understand that 492 users are currently unable to authenticate via SSO with the INVALID_CONFIGURATION error, and we are looking into this for you. To help us investigate further, could you please provide a screenshot of the SSO configuration and any relevant audit logs? Our Security Engineering team will review the details and follow up with you as soon as possible.\"\n}"
+}

@@ -1,0 +1,19 @@
+{
+  "input_tokens": 431,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 63,
+  "request": {
+    "max_output_tokens": 512,
+    "message_chars": 1321,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 659,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "case": "T2",
+    "task": "judge"
+  },
+  "text": "```json\n{\"score\": 0.5, \"reasoning\": \"The response references an error code (SCHEMA_MISMATCH), but it does not point to a concrete diagnostic step drawn from the cited documentation (DataBridge Pro), which itself seems misaligned with the product (CloudSync).\"}\n```"
+}

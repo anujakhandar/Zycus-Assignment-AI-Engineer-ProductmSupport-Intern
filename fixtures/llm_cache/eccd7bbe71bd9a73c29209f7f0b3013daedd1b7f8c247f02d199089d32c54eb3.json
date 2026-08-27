@@ -1,0 +1,19 @@
+{
+  "input_tokens": 1951,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 290,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4041,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4066,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.2.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\":      {\"value\": \"CloudSync\", \"reasoning\": \"The ticket explicitly names CloudSync.\", \"confidence\": 1.0},\n  \"product_area\": {\"value\": \"Conflict Resolution\", \"reasoning\": \"The ticket mentions missing data in CloudSync's Conflict Resolution module.\", \"confidence\": 1.0},\n  \"category\":     {\"value\": \"Data Loss\", \"reasoning\": \"The customer reports missing critical data records.\", \"confidence\": 0.9},\n  \"urgency\":      {\"value\": \"P1\", \"reasoning\": \"The customer reports business continuity at risk and missing critical records affecting HR team operations.\", \"confidence\": 0.9},\n  \"known_issue\": null,\n  \"cited_chunk_ids\": [],\n  \"responder_team\": \"Tier-2 Support\",\n  \"routing_reasoning\": \"Data loss and core operational issues in CloudSync require Tier-2 support investigation.\",\n  \"draft_response\": \"Hello, thank you for reaching out to CloudSync support. We understand that you are experiencing missing data within the Conflict Resolution module affecting your HR team operations. Our team is reviewing the details of your report to investigate the cause of the missing records. Could you please provide any relevant sync job logs or error messages from your dashboard to help us assist you further?\"\n}"
+}

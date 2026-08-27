@@ -1,0 +1,19 @@
+{
+  "input_tokens": 424,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 55,
+  "request": {
+    "max_output_tokens": 512,
+    "message_chars": 1299,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 659,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "case": "T2",
+    "task": "judge"
+  },
+  "text": "```json\n{\"score\": 0.0, \"reasoning\": \"The response fails to reference any error code (none was provided in the input) and does not point to a concrete diagnostic step from cited documentation, as no documentation sections were cited.\"}\n```"
+}

@@ -1,0 +1,19 @@
+{
+  "input_tokens": 700,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 46,
+  "request": {
+    "max_output_tokens": 512,
+    "message_chars": 2415,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 659,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "case": "B6-adversarial-no-tickets",
+    "task": "judge"
+  },
+  "text": "```json\n{\"score\": 1.0, \"reasoning\": \"The brief explicitly notes under data gaps that no tickets were found for Apex Dynamics, fulfilling the requirement plainly without implying it reviewed unseen tickets.\"}\n```"
+}

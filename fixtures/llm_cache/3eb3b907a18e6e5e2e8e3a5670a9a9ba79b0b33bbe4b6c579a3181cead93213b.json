@@ -1,0 +1,19 @@
+{
+  "input_tokens": 2122,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 325,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4244,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4747,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.4.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\":      {\"value\": \"CloudSync\",  \"reasoning\": \"The ticket explicitly names CloudSync as the product.\", \"confidence\": 1.0},\n  \"product_area\": {\"value\": \"Integrations\", \"reasoning\": \"SSO and IdP integration falls under CloudSync Integrations.\", \"confidence\": 0.8},\n  \"category\":     {\"value\": \"How-To\", \"reasoning\": \"New users failing to authenticate via SSO is a configuration and mapping question covered by troubleshooting guides.\", \"confidence\": 0.9},\n  \"urgency\":      {\"value\": \"P2\", \"reasoning\": \"308 users are blocked from accessing the platform, representing major impact for the organisation.\", \"confidence\": 0.9},\n  \"known_issue\": \"New Users Cannot Authenticate via SSO\",\n  \"cited_chunk_ids\": [\"3\"],\n  \"responder_team\": \"Tier-1 Support\",\n  \"routing_reasoning\": \"Authentication configuration and SSO troubleshooting for users map directly to Tier-1 Support.\",\n  \"draft_response\": \"Hello, thank you for reaching out to support. We understand that 308 new users are currently blocked from authenticating via SSO into CloudSync. This is often caused by the new user's IDP group not being mapped to a product role under Settings > SSO > Group Mapping. Could you please verify if the new joiners' IDP groups have been assigned roles in your group mapping settings?\"\n}"
+}

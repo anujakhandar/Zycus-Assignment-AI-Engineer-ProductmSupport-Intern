@@ -1,0 +1,20 @@
+{
+  "input_tokens": 2014,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 203,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 5031,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 1945,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "account": "ACC-1664",
+    "prompt": "account_risk@1.0.0",
+    "task": "account_risk"
+  },
+  "text": "{\n  \"open_risks\": [\n    {\n      \"risk\": \"Upcoming renewal with high unresolved ticket count\",\n      \"severity\": \"High\",\n      \"evidence\": \"5 unresolved tickets out of 8 total, with renewal date on 2026-06-24\",\n      \"source\": \"renewal_date\"\n    },\n    {\n      \"risk\": \"Multiple Data Loss category tickets\",\n      \"severity\": \"High\",\n      \"evidence\": \"3 Data Loss tickets in the past 90 days\",\n      \"source\": \"by_category\"\n    },\n    {\n      \"risk\": \"Unutilized licensed seats\",\n      \"severity\": \"Low\",\n      \"evidence\": \"1115 active seats out of 1239 licensed seats\",\n      \"source\": \"seats_licensed\"\n    }\n  ],\n  \"churn_signals\": []\n}"
+}

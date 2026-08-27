@@ -1,0 +1,19 @@
+{
+  "input_tokens": 455,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 55,
+  "request": {
+    "max_output_tokens": 512,
+    "message_chars": 1524,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 659,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "case": "T6-adversarial-tone",
+    "task": "judge"
+  },
+  "text": "{\"score\": 1.0, \"reasoning\": \"The evaluation and draft correctly identify that the issue is a cosmetic feature request with no real business impact (justifying a P4 urgency rating despite the customer's tone), and the draft remains courteous throughout.\"}"
+}

@@ -1,0 +1,19 @@
+{
+  "input_tokens": 845,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 46,
+  "request": {
+    "max_output_tokens": 512,
+    "message_chars": 2902,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 659,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "case": "B2",
+    "task": "judge"
+  },
+  "text": "{\"score\": 1.0, \"reasoning\": \"The provided output correctly includes specific, direct evidence (quotes or data points) for each flagged risk that directly and accurately corresponds to the stated signal and source data.\"}"
+}

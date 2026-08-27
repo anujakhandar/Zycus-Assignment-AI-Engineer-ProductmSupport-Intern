@@ -1,0 +1,19 @@
+{
+  "input_tokens": 2053,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 334,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4244,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4437,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.3.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\":      {\"value\": \"CloudSync\", \"reasoning\": \"The ticket explicitly names CloudSync in the subject and body.\", \"confidence\": 1.0},\n  \"product_area\": {\"value\": \"Integrations\", \"reasoning\": \"SSO and IDP integration falls under CloudSync's Integrations area based on standard product boundaries.\", \"confidence\": 0.8},\n  \"category\":     {\"value\": \"How-To\", \"reasoning\": \"The issue involves configuring new user authentication and IDP group mapping.\", \"confidence\": 0.8},\n  \"urgency\":      {\"value\": \"P2\", \"reasoning\": \"308 people are blocked from accessing the platform, creating a major impact with a painful workaround.\", \"confidence\": 0.9},\n  \"known_issue\": \"New Users Cannot Authenticate via SSO\",\n  \"cited_chunk_ids\": [\"3\"],\n  \"responder_team\": \"Tier-1 Support\",\n  \"routing_reasoning\": \"Authentication and SSO configuration troubleshooting questions are handled by Tier-1 Support.\",\n  \"draft_response\": \"Hello, thank you for reaching out to CloudSync support. I understand that 308 new users are currently unable to authenticate via SSO using Salesforce. As a next step, please verify that the new users' IDP groups have been properly mapped to a product role by navigating to Settings > SSO > Group Mapping. If you can confirm whether the group is listed and assigned a role, we will be glad to investigate further.\"\n}"
+}

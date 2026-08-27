@@ -1,0 +1,19 @@
+{
+  "input_tokens": 457,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 52,
+  "request": {
+    "max_output_tokens": 512,
+    "message_chars": 1410,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 659,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "case": "T5",
+    "task": "judge"
+  },
+  "text": "{\"score\": 1.0, \"reasoning\": \"The response explicitly identifies group-to-role mapping (\\\"verify that the new users' IDP groups are mapped to a product role\\\") based on the cited SSO documentation, avoiding generic advice.\"}"
+}

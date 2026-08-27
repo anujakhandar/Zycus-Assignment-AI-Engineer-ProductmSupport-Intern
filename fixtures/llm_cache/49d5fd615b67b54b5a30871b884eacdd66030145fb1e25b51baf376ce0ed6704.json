@@ -1,0 +1,19 @@
+{
+  "input_tokens": 1956,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 308,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 3388,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4747,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.4.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\":      {\"value\": \"AnalyticsHub\", \"reasoning\": \"The customer explicitly names AnalyticsHub in the ticket body.\", \"confidence\": 1.0},\n  \"product_area\": {\"value\": \"Reports\", \"reasoning\": \"The issue specifically concerns column headers in AnalyticsHub Reports exports.\", \"confidence\": 1.0},\n  \"category\":     {\"value\": \"Feature Request\", \"reasoning\": \"The customer is asking for sentence-case column headers to match a style guide rather than reporting a broken feature or bug.\", \"confidence\": 0.8},\n  \"urgency\":      {\"value\": \"P4\", \"reasoning\": \"The ticket explicitly states there is no impact on the data and a workaround exists in Excel, making this a low-impact cosmetic issue.\", \"confidence\": 1.0},\n  \"known_issue\": null,\n  \"cited_chunk_ids\": [],\n  \"responder_team\": \"Tier-1 Support\",\n  \"routing_reasoning\": \"Standard support requests and feature inquiries are initially handled by Tier-1 Support.\",\n  \"draft_response\": \"Hello, thank you for reaching out to AnalyticsHub support. We understand you would like the column headers in your Reports export to follow sentence case instead of title case. We have noted this feedback regarding your export formatting preferences. Please let us know if you need assistance with any other AnalyticsHub features in the meantime.\"\n}"
+}

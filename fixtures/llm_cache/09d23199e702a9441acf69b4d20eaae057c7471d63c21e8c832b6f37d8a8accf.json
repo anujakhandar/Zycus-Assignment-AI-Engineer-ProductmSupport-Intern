@@ -1,0 +1,20 @@
+{
+  "input_tokens": 2555,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 212,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 7082,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 1945,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "account": "ACC-1785",
+    "prompt": "account_risk@1.0.0",
+    "task": "account_risk"
+  },
+  "text": "{\n  \"open_risks\": [\n    {\n      \"risk\": \"Poor health status\",\n      \"severity\": \"High\",\n      \"evidence\": \"At Risk\",\n      \"source\": \"health_status\"\n    },\n    {\n      \"risk\": \"Inactivity / low engagement\",\n      \"severity\": \"High\",\n      \"evidence\": \"47 days\",\n      \"source\": \"last_login_days_ago\"\n    },\n    {\n      \"risk\": \"Low customer satisfaction\",\n      \"severity\": \"High\",\n      \"evidence\": \"2.29\",\n      \"source\": \"mean_satisfaction\"\n    },\n    {\n      \"risk\": \"Procurement pricing review requested\",\n      \"severity\": \"Medium\",\n      \"evidence\": \"Procurement team requested pricing review\",\n      \"source\": \"escalation_notes\"\n    }\n  ],\n  \"churn_signals\": []\n}"
+}

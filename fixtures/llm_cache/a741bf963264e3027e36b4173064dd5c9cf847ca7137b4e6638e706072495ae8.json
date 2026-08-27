@@ -1,0 +1,19 @@
+{
+  "input_tokens": 400,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 48,
+  "request": {
+    "max_output_tokens": 512,
+    "message_chars": 1194,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 659,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "case": "T4",
+    "task": "judge"
+  },
+  "text": "{\"score\": 1.0, \"reasoning\": \"The draft acknowledges the feature request honestly, notes that the product team tracks such requests for future updates, and does not commit to building the feature or provide a delivery date.\"}"
+}

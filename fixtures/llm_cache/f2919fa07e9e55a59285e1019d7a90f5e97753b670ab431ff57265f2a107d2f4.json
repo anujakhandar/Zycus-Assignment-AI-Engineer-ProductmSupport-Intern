@@ -1,0 +1,19 @@
+{
+  "input_tokens": 1961,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 373,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4146,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4066,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.2.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\": {\n    \"value\": \"WorkflowEngine\",\n    \"reasoning\": \"The ticket explicitly names WorkflowEngine in the subject and body.\",\n    \"confidence\": 1.0\n  },\n  \"product_area\": {\n    \"value\": \"Triggers\",\n    \"reasoning\": \"The error mentions a missing required field in action configuration, falling under WorkflowEngine triggers/actions.\",\n    \"confidence\": 0.6\n  },\n  \"category\": {\n    \"value\": \"Bug\",\n    \"reasoning\": \"New users are receiving an INVALID_CONFIGURATION error when attempting to authenticate via SSO.\",\n    \"confidence\": 0.8\n  },\n  \"urgency\": {\n    \"value\": \"P1\",\n    \"reasoning\": \"492 users are currently blocked from accessing the platform.\",\n    \"confidence\": 1.0\n  },\n  \"known_issue\": \"Common Integration Errors\",\n  \"cited_chunk_ids\": [\n    \"troubleshooting/performance-and-integrations.md#06\"\n  ],\n  \"responder_team\": \"Tier-2 Support\",\n  \"routing_reasoning\": \"Reproducible SSO and configuration errors for WorkflowEngine require Tier-2 Support investigation.\",\n  \"draft_response\": \"Hello, thank you for reaching out to support. We understand that 492 new users are currently blocked from accessing WorkflowEngine due to an SSO configuration error. Our team is reviewing the error details you provided regarding the missing required field. We will investigate the cause and follow up with you as soon as more information is available. In the meantime, please confirm if any recent changes were made to your Azure AD configuration.\"\n}"
+}

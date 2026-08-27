@@ -1,0 +1,19 @@
+{
+  "input_tokens": 466,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 54,
+  "request": {
+    "max_output_tokens": 512,
+    "message_chars": 1398,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 659,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "case": "T7-adversarial-sparse",
+    "task": "judge"
+  },
+  "text": "```json\n{\"score\": 1.0, \"reasoning\": \"The output successfully avoids inventing specifics such as error codes, versions, or user counts from an empty ticket, correctly noting the lack of information and flagging the ticket for human review.\"}\n```"
+}

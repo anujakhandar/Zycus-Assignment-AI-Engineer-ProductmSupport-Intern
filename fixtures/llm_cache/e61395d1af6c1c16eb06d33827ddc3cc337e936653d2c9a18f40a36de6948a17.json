@@ -1,0 +1,19 @@
+{
+  "input_tokens": 1975,
+  "model": "gemini-3.5-flash-lite",
+  "output_tokens": 313,
+  "request": {
+    "max_output_tokens": 4096,
+    "message_chars": 4073,
+    "model": "gemini-3.5-flash-lite",
+    "seed": 42,
+    "system_chars": 4066,
+    "temperature": 0.0
+  },
+  "stop_reason": "STOP",
+  "tags": {
+    "prompt": "triage@1.2.0",
+    "task": "triage"
+  },
+  "text": "{\n  \"product\":      {\"value\": \"AnalyticsHub\",  \"reasoning\": \"The ticket explicitly names AnalyticsHub Reports exports.\", \"confidence\": 1.0},\n  \"product_area\": {\"value\": \"Reports\",     \"reasoning\": \"The issue concerns AnalyticsHub Reports exports.\", \"confidence\": 1.0},\n  \"category\":     {\"value\": \"Feature Request\", \"reasoning\": \"The customer is asking for a change to title case vs sentence case headers, which is a styling request rather than a bug.\", \"confidence\": 0.8},\n  \"urgency\":      {\"value\": \"P4\",    \"reasoning\": \"The issue affects a single user with no data impact and a straightforward workaround of renaming columns in Excel.\", \"confidence\": 1.0},\n  \"known_issue\": null,\n  \"cited_chunk_ids\": [],\n  \"responder_team\": \"Product Management\",\n  \"routing_reasoning\": \"Feature requests and product styling enhancements are routed to Product Management.\",\n  \"draft_response\": \"Hello, thank you for reaching out to AnalyticsHub support. We understand you would like the exported column headers to display in sentence case rather than title case to align with your style guide. Since there is no data impact and you have a workaround in Excel, I have logged this feedback with our Product Management team for consideration in future updates. Please let us know if you have any other questions regarding your reports.\"\n}"
+}
