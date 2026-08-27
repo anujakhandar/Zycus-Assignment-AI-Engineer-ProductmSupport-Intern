@@ -20,6 +20,24 @@ Four things are built.
 Everything is reachable through one entry point, `main.py`. There is also a Streamlit
 interface, `app.py`, for people who do not work in a terminal.
 
+## How I approached this
+
+I started by profiling the dataset rather than writing pipeline code, because I wanted
+to know what was actually in it before deciding what to build. That turned out to be the
+most useful hour I spent. Three of the properties I found contradicted what I had
+assumed from reading the schema document, and each one changed a design decision. Those
+findings are written up in a section further down, and they are the reason several parts
+of this project look the way they do.
+
+The second thing I decided early was that the system should never present something it
+cannot support. A support tool that invents an error code meaning, or a brief that
+attributes words to a customer who never wrote them, is worse than no tool at all,
+because a human will act on it. Most of the engineering here is about making that
+impossible rather than unlikely: citations are filtered against what was actually
+retrieved, quotes are checked character by character and dropped when they fail, and
+anything the model returns that is outside the known vocabulary is repaired by rule and
+flagged for review.
+
 ## Setup
 
 ```
@@ -348,6 +366,84 @@ Three properties measured in the supplied data shaped the implementation.
    clock is anchored to the newest ticket in the dataset by default, which keeps the 90
    day semantics meaningful and stops the result changing as real time passes. The
    `--days` and `--all-history` flags override it.
+
+## Where I ran into difficulty
+
+### Deciding what to do about a foreign key that does not work
+
+Finding that `account_id` does not join was quick. Deciding what to do about it took much
+longer, because both options are defensible and they lead to different products.
+
+Joining strictly on `account_id`, as the schema document says, is the honest reading of
+the specification. It also means 496 of 500 tickets have no account context, so almost
+every brief would be built from nothing. Falling back to company name recovers all 500
+and produces a genuinely useful brief, but it silently invents a relationship the data
+does not actually assert, and if the real system ever had two accounts for one company
+it would merge them.
+
+What I eventually settled on was refusing to make the choice invisible. The pipeline
+tries `account_id` first, falls back to company, and writes a sentence into `data_gaps`
+saying exactly which path it took and why. The fallback is also a parameter, defaulting
+to off in the loader, so a caller who wants the strict behaviour gets it. The reasoning I
+applied was that the danger is not picking the wrong join, it is a TAM reading a brief
+without knowing which join produced it.
+
+I hit the same question again with the 90 day window and answered it the same way. Every
+ticket predates a 90 day window measured from today, so the literal reading returns zero
+rows for every account. I anchored the clock to the newest ticket in the data, which
+keeps the requirement meaningful, and said so in the output rather than quietly
+returning an empty brief.
+
+### Getting determinism that actually holds
+
+Task 2 asks for deterministic output, and my first assumption was that setting
+temperature to zero would be enough. It is not. Temperature zero narrows variation but
+does not eliminate it, and even if the model were perfectly stable, my own code was not:
+I was passing ticket history in whatever order it came out of the file, and serialising
+statistics from a dictionary whose key order could shift. Two runs could differ without
+the model doing anything different at all.
+
+Fixing it needed four separate changes rather than one setting. Ticket history is sorted
+by id before it enters the prompt. Statistics are counted into a fixed key order. Churn
+signals are sorted by ticket id and quote. And every request is hashed and cached, so an
+identical input replays a stored response instead of being resampled.
+
+That last one had a consequence I did not anticipate but came to like. Because the cache
+makes runs reproducible, it also makes the whole project runnable with no API key at
+all, which is what lets continuous integration execute the full evaluation suite on
+every push without a secret. A decision I made for correctness solved an infrastructure
+problem I had not started thinking about yet.
+
+The part I found genuinely uncomfortable was accepting that I could not measure accuracy.
+Because `category` and `urgency` in the dataset are unrelated to ticket text, there is no
+ground truth to score against, so an evaluation harness built on comparing predictions to
+recorded labels would produce numbers that look rigorous and mean nothing. I ended up
+writing acceptance criteria per case instead, checking properties I can actually defend,
+and reporting agreement with the recorded fields separately as a measurement of the data
+rather than of the model.
+
+## One thing I would add next
+
+If I were continuing this, I would capture what the support agent actually sends after
+editing the draft reply, and store it alongside the draft the system produced.
+
+The reason is that this project's hardest constraint was the absence of trustworthy
+labels. Every quality judgement I made had to come from hand written criteria, because
+the labels in the dataset carry no signal. But a support desk generates the labels it
+needs as a side effect of doing its job. If an agent changes the urgency before
+responding, that is a correction. If they rewrite the whole draft, that is a strong
+negative signal about the response. If they send it unedited, that is an endorsement.
+
+Diffing the sent reply against the generated draft would give a continuously growing set
+of real examples at no extra cost to anyone, and it would turn the evaluation harness
+from a fixed set of thirteen cases that I wrote into a regression suite that grows with
+actual usage. It would also make the confidence scores meaningful, because they could
+finally be calibrated against whether a human accepted the output rather than against
+the model's own estimate of itself.
+
+I would build it as an append only log of the triage id, the generated output, the sent
+output and the edit distance between them, and promote any case where an agent
+overrode a high confidence prediction straight into the eval suite for review.
 
 ## Cost control
 

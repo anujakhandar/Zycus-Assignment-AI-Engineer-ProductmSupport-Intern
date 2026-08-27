@@ -14,8 +14,18 @@ import json
 import sys
 from pathlib import Path
 
-# Console encoding on Windows defaults to cp1252, which cannot print the
-# em dashes and arrows in the knowledge base or the model's output.
+# Checked before anything else so an unsupported interpreter reports itself
+# clearly instead of failing later inside a dependency. 3.10 is the floor set by
+# anthropic, python-dotenv and streamlit alike.
+MINIMUM_PYTHON = (3, 10)
+if sys.version_info < MINIMUM_PYTHON:
+    sys.exit(
+        f"This project needs Python {MINIMUM_PYTHON[0]}.{MINIMUM_PYTHON[1]} or newer. "
+        f"You are running {sys.version.split()[0]}."
+    )
+
+# Console encoding on Windows defaults to cp1252, which cannot print every
+# character that appears in the knowledge base or in model output.
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
@@ -157,6 +167,14 @@ def cmd_eval(args: argparse.Namespace) -> int:
     return 0 if summary["failed"] == 0 else 1
 
 
+def cmd_serve(args: argparse.Namespace) -> int:
+    import uvicorn
+
+    print(f"Serving on http://{args.host}:{args.port}   docs at /docs")
+    uvicorn.run("src.api:app", host=args.host, port=args.port, reload=args.reload)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="main.py",
@@ -188,6 +206,12 @@ def build_parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--task", choices=["triage", "brief"], help="run only one task's cases")
     evaluate.add_argument("--no-judge", action="store_true", help="rule-based scoring only")
     evaluate.set_defaults(func=cmd_eval)
+
+    serve = subparsers.add_parser("serve", help="run the REST API")
+    serve.add_argument("--host", default="127.0.0.1")
+    serve.add_argument("--port", type=int, default=8000)
+    serve.add_argument("--reload", action="store_true", help="reload on code changes")
+    serve.set_defaults(func=cmd_serve)
 
     return parser
 
