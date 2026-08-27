@@ -1,0 +1,53 @@
+name: evals
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      # Proves the "runs from a clean pip install" requirement on every push.
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Check no credentials are committed
+        run: |
+          if git grep -nE 'sk-ant-[A-Za-z0-9_-]{10,}' -- . ':!.env.example'; then
+            echo "::error::A live-looking API key is present in the repository."
+            exit 1
+          fi
+          echo "No credentials found."
+
+      - name: Verify the dataset loads
+        run: python -m src.data_loader
+
+      # LLM_OFFLINE=1 means a cache miss fails rather than calling the API, so
+      # this job needs no key and no secret. The committed fixtures under
+      # fixtures/llm_cache/ supply every response.
+      - name: Run evaluation harness
+        env:
+          LLM_OFFLINE: "1"
+        run: python main.py eval
+
+      - name: Upload eval report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-report
+          path: |
+            eval_report.json
+            eval_report.md
