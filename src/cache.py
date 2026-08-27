@@ -1,10 +1,12 @@
 """Content-addressed cache for model responses.
 
-Task 2 requires that the same input always produces the same output.
-``temperature=0`` narrows the variance but does not remove it, so the pipeline
-also keys every request by a hash of everything that affects the result - model
-id, system prompt, messages, temperature, max_tokens, prompt version - and
-replays the stored response when that key is seen again.
+Task 2 requires that the same input always produces the same output. The
+Messages API no longer exposes sampling controls at all - ``temperature``,
+``top_p`` and ``top_k`` were removed - so there is no setting that makes
+generation repeatable. This cache is what provides it: every request is hashed
+by everything that affects the result, meaning model id, system prompt,
+messages, max_tokens and prompt version, and the stored response is replayed
+whenever that key is seen again.
 
 Two consequences worth knowing:
 

@@ -20,7 +20,7 @@ Three behaviours matter, because the brief asks for them directly:
 Configuration comes from ``.env`` (see ``.env.example``):
 
     GEMINI_API_KEY        required for live calls; not needed on a cache hit
-    GEMINI_MODEL          default: gemini-2.0-flash
+    GEMINI_MODEL          default: gemini-3.5-flash-lite
     LLM_TEMPERATURE       default: 0.0
     LLM_SEED              default: 42
     LLM_MAX_TOKENS        default: 4096
@@ -41,6 +41,8 @@ from __future__ import annotations
 
 import logging
 import os
+import re
+import time
 from dataclasses import dataclass, field
 from typing import Any, Optional, Sequence
 
@@ -52,7 +54,7 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
+DEFAULT_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
 DEFAULT_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.0"))
 DEFAULT_SEED = int(os.getenv("LLM_SEED", "42"))
 DEFAULT_MAX_TOKENS = int(os.getenv("LLM_MAX_TOKENS", "4096"))
@@ -271,6 +273,10 @@ class LLMClient:
             seed=request["seed"],
             max_output_tokens=request["max_output_tokens"],
             stop_sequences=request["stop_sequences"] or None,
+            # No tools are declared, so the SDK's automatic function calling has
+            # nothing to do. Disabling it silences its warning and removes a
+            # code path this project never wants entered.
+            automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
         )
         contents = [
             types.Content(
@@ -281,29 +287,54 @@ class LLMClient:
         ]
 
         self.live_calls += 1
-        try:
-            response = client.models.generate_content(
-                model=request["model"], contents=contents, config=config
-            )
-        except errors.ClientError as exc:
-            message = str(exc)
-            lowered = message.lower()
-            if "api key" in lowered or "unauthenticated" in lowered or "permission" in lowered:
-                raise LLMConfigError(f"The API rejected this key: {message}") from exc
-            if "not found" in lowered or "404" in lowered:
-                raise LLMError(
-                    f"Model {request['model']!r} is not available to this key. "
-                    "Set GEMINI_MODEL in .env to one the key can call."
-                ) from exc
-            if "resource_exhausted" in lowered or "429" in lowered or "quota" in lowered:
-                raise LLMError(f"Rate limit or quota exceeded: {message}") from exc
-            raise LLMError(f"Request rejected: {message}") from exc
-        except errors.ServerError as exc:
-            raise LLMError(f"Provider error, safe to retry: {exc}") from exc
-        except (LLMError, KeyboardInterrupt):
-            raise
-        except Exception as exc:  # network failures surface as plain exceptions
-            raise LLMError(f"Could not reach the API: {type(exc).__name__}: {exc}") from exc
+        response = None
+
+        # The free tier allows 15 requests per minute per model, and a 429 names
+        # the exact wait in its retryDelay. Honouring it lets a full evaluation
+        # run finish unattended instead of failing partway and reporting quota
+        # errors as if they were quality failures.
+        for attempt in range(self.max_retries + 1):
+            try:
+                response = client.models.generate_content(
+                    model=request["model"], contents=contents, config=config
+                )
+                break
+            except errors.ClientError as exc:
+                message = str(exc)
+                lowered = message.lower()
+
+                if "api key" in lowered or "unauthenticated" in lowered or "permission" in lowered:
+                    raise LLMConfigError(f"The API rejected this key: {message}") from exc
+                if "not found" in lowered or "404" in lowered:
+                    raise LLMError(
+                        f"Model {request['model']!r} is not available to this key. "
+                        "Set GEMINI_MODEL in .env to one the key can call."
+                    ) from exc
+
+                rate_limited = "resource_exhausted" in lowered or "429" in lowered or "quota" in lowered
+                if rate_limited and attempt < self.max_retries:
+                    wait = _retry_delay(message)
+                    logger.warning(
+                        "Rate limited, waiting %.0fs before retry %d of %d.",
+                        wait, attempt + 1, self.max_retries,
+                    )
+                    time.sleep(wait)
+                    continue
+                if rate_limited:
+                    raise LLMError(f"Rate limit or quota exceeded: {message}") from exc
+                raise LLMError(f"Request rejected: {message}") from exc
+            except errors.ServerError as exc:
+                if attempt < self.max_retries:
+                    time.sleep(2 ** attempt)
+                    continue
+                raise LLMError(f"Provider error, safe to retry: {exc}") from exc
+            except (LLMError, KeyboardInterrupt):
+                raise
+            except Exception as exc:  # network failures surface as plain exceptions
+                raise LLMError(f"Could not reach the API: {type(exc).__name__}: {exc}") from exc
+
+        if response is None:
+            raise LLMError("Request failed after exhausting retries.")
 
         usage = getattr(response, "usage_metadata", None)
         finish = None
@@ -326,6 +357,17 @@ class LLMClient:
             logger.warning("Response stopped for reason %s and may be incomplete.", finish)
 
         return extract_text(response), meta
+
+
+def _retry_delay(message: str, default: float = 30.0) -> float:
+    """Seconds to wait after a 429, taken from the API's own retryDelay."""
+    match = re.search(r"retry in ([\d.]+)s", message) or re.search(r"'retryDelay': '(\d+)s'", message)
+    if match:
+        try:
+            return min(float(match.group(1)) + 2.0, 90.0)
+        except ValueError:
+            pass
+    return default
 
 
 def extract_text(response) -> str:
