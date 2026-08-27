@@ -3,3 +3,4 @@ pydantic>=2.7,<3.0
 fastapi>=0.110,<1.0
 uvicorn[standard]>=0.29,<1.0
 python-dotenv>=1.0,<2.0
+streamlit>=1.30,<2.0
