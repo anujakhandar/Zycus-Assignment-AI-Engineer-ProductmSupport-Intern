@@ -17,7 +17,8 @@ Four things are built.
 4. __Design note.__ Failure modes, the latency and quality tradeoff, data sensitivity,
    and scaling. It is a section of this README, further down.
 
-Everything is reachable through one entry point, `main.py`.
+Everything is reachable through one entry point, `main.py`. There is also a Streamlit
+interface, `app.py`, for people who do not work in a terminal.
 
 ## Setup
 
@@ -218,6 +219,31 @@ failure so continuous integration can gate on it.
    must report the gap and must produce no churn signals at all.
 
 Results are committed as `eval_report.md` and `eval_report.json`.
+
+## Web interface
+
+Both tools are also available through a Streamlit interface aimed at people who do not
+use a terminal.
+
+```
+streamlit run app.py
+```
+
+The triage tab takes a ticket, either picked from the dataset or pasted in, and shows
+the classification with its confidence and reasoning, the routing decision, the
+knowledge base sections that support it in expandable panels, and an editable draft
+reply. Anything flagged for human review is called out at the top before the agent
+reads anything else.
+
+The account brief tab takes an account, shows the headline numbers, then builds the
+brief. Risks are colour coded by severity, churn signals are shown as the customer's
+own quoted words next to the ticket id they came from, and the whole brief can be
+downloaded as markdown. Data gaps are collapsed into a panel rather than hidden, so a
+TAM can see what the brief could not establish.
+
+Because responses are cached, the interface works with no API key for anything that has
+been generated before. A request that has never been made shows a plain explanation
+rather than an error trace.
 
 ## Design note
 
